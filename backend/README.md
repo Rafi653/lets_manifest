@@ -48,6 +48,20 @@ cp .env.example .env
 Edit `.env` with your configuration:
 
 ```env
+DATABASE_URL=postgresql+asyncpg://lets_manifest_user:lets_manifest_password@localhost:5432/lets_manifest_dev
+SECRET_KEY=your-secret-key-here
+```
+
+### Database Setup
+
+Initialize the database with Alembic:
+
+```bash
+# Run migrations
+alembic upgrade head
+```
+
+See [DATABASE_GUIDE.md](DATABASE_GUIDE.md) for detailed database setup and migration instructions.
 # Application
 APP_NAME=Let's Manifest API
 APP_VERSION=1.0.0
