@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: lets_manifest_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: lets_manifest_dev
+      POSTGRES_USER: lets_manifest_user
+      POSTGRES_PASSWORD: lets_manifest_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lets_manifest_user -d lets_manifest_dev"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API (FastAPI)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend/Dockerfile
+    container_name: lets_manifest_api
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: postgresql+asyncpg://lets_manifest_user:lets_manifest_password@postgres:5432/lets_manifest_dev
+      SECRET_KEY: dev-secret-key-change-in-production
+      DEBUG: "True"
+      ENVIRONMENT: development
+      BACKEND_CORS_ORIGINS: '["http://localhost:5173", "http://localhost:3000"]'
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - backend_cache:/root/.cache
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  # Frontend (React + Vite)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/frontend/Dockerfile
+    container_name: lets_manifest_web
+    restart: unless-stopped
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000/api/v1
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - frontend_cache:/root/.cache
+    depends_on:
+      - backend
+    command: npm run dev -- --host 0.0.0.0
+
+volumes:
+  postgres_data:
+    driver: local
+  backend_cache:
+    driver: local
+  frontend_cache:
+    driver: local
+
+networks:
+  default:
+    name: lets_manifest_network
