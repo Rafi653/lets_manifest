@@ -1,0 +1,159 @@
+.blog-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.blog-list-loading,
+.blog-list-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6b7280;
+}
+
+.spinner-large {
+  width: 48px;
+  height: 48px;
+  border: 4px solid #e5e7eb;
+  border-top-color: #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.blog-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.2s;
+}
+
+.blog-card:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.blog-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.blog-header-content {
+  flex: 1;
+}
+
+.blog-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.blog-title:hover {
+  color: #3b82f6;
+}
+
+.blog-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.status-badge,
+.visibility-badge,
+.featured-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-badge.status-draft {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.status-badge.status-published {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.status-badge.status-archived {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+.visibility-badge {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.featured-badge {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.blog-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.blog-excerpt {
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 1rem 0;
+}
+
+.blog-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.blog-footer-info {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.blog-date,
+.blog-views {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .blog-card-header {
+    flex-direction: column;
+  }
+  
+  .blog-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  
+  .blog-actions button {
+    flex: 1;
+  }
+}
