@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { StreakInfo } from '../../types/habit';
+import type { StreakInfo } from '../../types/habit';
 import './StreakDisplay.css';
 
 interface StreakDisplayProps {

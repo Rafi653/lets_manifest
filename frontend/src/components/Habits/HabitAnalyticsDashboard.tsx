@@ -4,10 +4,10 @@
 
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { HabitAnalytics, ProgressTrends } from '../../types/habit';
+import type { HabitAnalytics, ProgressTrends } from '../../types/habit';
 import { habitAnalyticsService } from '../../services/habitService';
 import StreakDisplay from './StreakDisplay';
-import CompletionStats from './CompletionStats';
+import CompletionStatsComponent from './CompletionStats';
 import CompletionCalendar from './CompletionCalendar';
 import MotivationalInsights from './MotivationalInsights';
 import './HabitAnalyticsDashboard.css';
@@ -113,7 +113,7 @@ const HabitAnalyticsDashboard: React.FC = () => {
         habitName={analytics.habit_name}
       />
 
-      <CompletionStats
+      <CompletionStatsComponent
         stats={analytics.completion_stats}
         confidenceLevel={analytics.confidence_level}
       />

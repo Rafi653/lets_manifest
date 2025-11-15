@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Habit, HabitInsights } from '../../types/habit';
+import type { Habit, HabitInsights } from '../../types/habit';
 import { habitService, habitAnalyticsService } from '../../services/habitService';
 import './Habits.css';
 

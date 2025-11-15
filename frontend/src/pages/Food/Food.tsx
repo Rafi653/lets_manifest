@@ -192,13 +192,13 @@ const Food: React.FC = () => {
                   setMealTypeFilter(e.target.value);
                   setPage(1);
                 }}
-              >
-                <option value="">All Meals</option>
-                <option value="breakfast">Breakfast</option>
-                <option value="lunch">Lunch</option>
-                <option value="dinner">Dinner</option>
-                <option value="snack">Snack</option>
-              </Select>
+                options={[
+                  { value: 'breakfast', label: 'Breakfast' },
+                  { value: 'lunch', label: 'Lunch' },
+                  { value: 'dinner', label: 'Dinner' },
+                  { value: 'snack', label: 'Snack' }
+                ]}
+              />
 
               <Input
                 label="Start Date"

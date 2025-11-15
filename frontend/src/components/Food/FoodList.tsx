@@ -105,14 +105,12 @@ const FoodList: React.FC<FoodListProps> = ({ foods, onEdit, onDelete, loading })
                 <div className="action-buttons">
                   <Button
                     variant="secondary"
-                    size="small"
                     onClick={() => onEdit(food)}
                   >
                     Edit
                   </Button>
                   <Button
                     variant="danger"
-                    size="small"
                     onClick={() => onDelete(food.id)}
                   >
                     Delete

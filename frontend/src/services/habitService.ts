@@ -3,7 +3,7 @@
  */
 
 import { apiClient } from '../api/client';
-import {
+import type {
   Habit,
   HabitEntry,
   HabitAnalytics,
@@ -14,7 +14,7 @@ import {
   UpdateHabitRequest,
   CreateHabitEntryRequest,
 } from '../types/habit';
-import { APIResponse, PaginatedResponse } from '../types/api';
+import type { APIResponse, PaginatedResponse } from '../types/api';
 
 /**
  * Habit CRUD operations

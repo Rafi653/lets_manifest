@@ -69,10 +69,10 @@ const WorkoutList: React.FC<WorkoutListProps> = ({ workouts, onEdit, onDelete, l
               </div>
             </div>
             <div className="workout-actions">
-              <Button variant="secondary" size="small" onClick={() => onEdit(workout)}>
+              <Button variant="secondary" onClick={() => onEdit(workout)}>
                 Edit
               </Button>
-              <Button variant="danger" size="small" onClick={() => onDelete(workout.id)}>
+              <Button variant="danger" onClick={() => onDelete(workout.id)}>
                 Delete
               </Button>
             </div>
