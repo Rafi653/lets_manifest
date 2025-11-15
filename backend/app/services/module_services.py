@@ -2,7 +2,7 @@
 Services for all app modules - habits, food, workouts, daily reviews, blog, progress.
 """
 
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from typing import List, Optional
 from uuid import UUID
 import re
@@ -87,7 +87,7 @@ class HabitService:
     async def create_entry(
         self, habit_id: UUID, user_id: UUID, entry_data: HabitEntryCreate
     ) -> HabitEntry:
-        """Create a habit entry."""
+        """Create a habit entry and update streaks."""
         habit = await self.get_habit(habit_id, user_id)
 
         # Check if entry already exists for this date
@@ -105,16 +105,85 @@ class HabitService:
             **entry_data.model_dump(),
             completed_at=datetime.utcnow() if entry_data.completed else None
         )
+        
+        created_entry = await self.entry_repository.create(entry)
 
-        # Update habit stats if completed
+        # Update habit stats using analytics service
         if entry_data.completed:
+            from app.services.habit_analytics_service import HabitAnalyticsService
+            analytics_service = HabitAnalyticsService(self.db)
+            streak_info = await analytics_service.calculate_streak(habit_id, user_id)
+            
             habit.total_completions += 1
-            # Simple streak logic (can be enhanced)
-            habit.current_streak += 1
-            if habit.current_streak > habit.longest_streak:
-                habit.longest_streak = habit.current_streak
+            habit.current_streak = streak_info.current_streak
+            habit.longest_streak = streak_info.longest_streak
+            await self.db.commit()
 
-        return await self.entry_repository.create(entry)
+        return created_entry
+
+    async def reset_habit_streak(self, habit_id: UUID, user_id: UUID) -> Habit:
+        """Reset a habit's streak to zero."""
+        habit = await self.get_habit(habit_id, user_id)
+        habit.current_streak = 0
+        await self.db.commit()
+        await self.db.refresh(habit)
+        return habit
+
+    async def recover_streak(
+        self, habit_id: UUID, user_id: UUID, recovery_date: date
+    ) -> HabitEntry:
+        """
+        Recover a streak by creating an entry for a missed date.
+        Only allowed within grace period.
+        """
+        from app.services.habit_analytics_service import HabitAnalyticsService
+        analytics_service = HabitAnalyticsService(self.db)
+        
+        # Check if recovery is allowed
+        recovery_info = await analytics_service.check_streak_recovery(habit_id, user_id)
+        if not recovery_info.can_recover:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Streak recovery is no longer available for this habit",
+            )
+
+        # Check if entry already exists
+        existing = await self.entry_repository.get_entry_by_date(habit_id, recovery_date)
+        if existing:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Entry already exists for this date",
+            )
+
+        # Verify recovery date is within allowed range
+        if recovery_date > date.today() or recovery_date < (date.today() - timedelta(days=recovery_info.grace_period_days + 1)):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Recovery date is outside the allowed grace period",
+            )
+
+        # Create recovery entry
+        entry = HabitEntry(
+            habit_id=habit_id,
+            entry_date=recovery_date,
+            completed=True,
+            completed_at=datetime.utcnow(),
+            notes="Streak recovery"
+        )
+        
+        created_entry = await self.entry_repository.create(entry)
+
+        # Update habit stats
+        habit = await self.get_habit(habit_id, user_id)
+        habit.total_completions += 1
+        
+        # Recalculate streak
+        streak_info = await analytics_service.calculate_streak(habit_id, user_id)
+        habit.current_streak = streak_info.current_streak
+        habit.longest_streak = streak_info.longest_streak
+        
+        await self.db.commit()
+        return created_entry
 
     async def get_habit_entries(
         self, habit_id: UUID, user_id: UUID, skip: int = 0, limit: int = 100

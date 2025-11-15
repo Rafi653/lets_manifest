@@ -2,6 +2,7 @@
 Habit endpoints.
 """
 
+from datetime import date
 from typing import Optional
 from uuid import UUID
 import math
@@ -144,4 +145,42 @@ async def get_habit_entries(
     return APIResponse(
         data=[HabitEntryResponse.model_validate(e) for e in entries],
         message="Habit entries retrieved successfully",
+    )
+
+
+@router.post("/{habit_id}/reset-streak", response_model=APIResponse[HabitResponse])
+async def reset_habit_streak(
+    habit_id: UUID,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Reset a habit's streak to zero."""
+    service = HabitService(db)
+    habit = await service.reset_habit_streak(habit_id, current_user.id)
+    return APIResponse(
+        data=HabitResponse.model_validate(habit),
+        message="Habit streak reset successfully",
+    )
+
+
+@router.post(
+    "/{habit_id}/recover-streak",
+    response_model=APIResponse[HabitEntryResponse],
+    status_code=status.HTTP_201_CREATED,
+)
+async def recover_habit_streak(
+    habit_id: UUID,
+    recovery_date: date = Query(..., description="Date to recover the streak for"),
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Recover a broken streak by creating an entry for a missed date.
+    Only allowed within the grace period.
+    """
+    service = HabitService(db)
+    entry = await service.recover_streak(habit_id, current_user.id, recovery_date)
+    return APIResponse(
+        data=HabitEntryResponse.model_validate(entry),
+        message="Streak recovered successfully",
     )
