@@ -1,6 +1,7 @@
 """
 Daily review-related Pydantic schemas.
 """
+
 from datetime import date, datetime
 from decimal import Decimal
 from typing import Optional
@@ -11,6 +12,7 @@ from pydantic import BaseModel, Field
 
 class DailyReviewBase(BaseModel):
     """Base schema for daily review."""
+
     review_date: date
     mood_rating: Optional[int] = Field(None, ge=1, le=10)
     energy_level: Optional[int] = Field(None, ge=1, le=10)
@@ -28,11 +30,13 @@ class DailyReviewBase(BaseModel):
 
 class DailyReviewCreate(DailyReviewBase):
     """Schema for creating daily review."""
+
     pass
 
 
 class DailyReviewUpdate(BaseModel):
     """Schema for updating daily review."""
+
     mood_rating: Optional[int] = Field(None, ge=1, le=10)
     energy_level: Optional[int] = Field(None, ge=1, le=10)
     productivity_rating: Optional[int] = Field(None, ge=1, le=10)
@@ -49,6 +53,7 @@ class DailyReviewUpdate(BaseModel):
 
 class DailyReviewResponse(DailyReviewBase):
     """Schema for daily review response."""
+
     id: UUID
     user_id: UUID
     created_at: datetime

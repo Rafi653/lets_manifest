@@ -1,7 +1,8 @@
 """
 Authentication endpoints.
 """
-from fastapi import APIRouter, Depends, HTTPException, status
+
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.database import get_db
@@ -12,14 +13,18 @@ from app.services.user_service import UserService
 router = APIRouter()
 
 
-@router.post("/register", response_model=APIResponse[UserResponse], status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/register",
+    response_model=APIResponse[UserResponse],
+    status_code=status.HTTP_201_CREATED,
+)
 async def register(
     user_data: UserCreate,
     db: AsyncSession = Depends(get_db),
 ):
     """
     Register a new user.
-    
+
     - **email**: Valid email address
     - **username**: Unique username (3-100 characters)
     - **password**: Strong password (min 8 characters)
@@ -28,10 +33,9 @@ async def register(
     """
     service = UserService(db)
     user = await service.create_user(user_data)
-    
+
     return APIResponse(
-        data=UserResponse.model_validate(user),
-        message="User registered successfully"
+        data=UserResponse.model_validate(user), message="User registered successfully"
     )
 
 
@@ -42,30 +46,24 @@ async def login(
 ):
     """
     Login and get JWT tokens.
-    
+
     - **email**: User's email address
     - **password**: User's password
-    
+
     Returns access and refresh tokens.
     """
     service = UserService(db)
     token_response = await service.login(credentials.email, credentials.password)
-    
-    return APIResponse(
-        data=token_response,
-        message="Login successful"
-    )
+
+    return APIResponse(data=token_response, message="Login successful")
 
 
 @router.post("/logout", response_model=APIResponse[dict])
 async def logout():
     """
     Logout user (client should discard tokens).
-    
+
     Since we're using JWT, logout is handled client-side by discarding tokens.
     This endpoint is provided for consistency and future enhancements.
     """
-    return APIResponse(
-        data={"logged_out": True},
-        message="Logout successful"
-    )
+    return APIResponse(data={"logged_out": True}, message="Logout successful")

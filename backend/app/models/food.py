@@ -1,6 +1,7 @@
 """
 Food model for food tracking and nutrition logging.
 """
+
 from datetime import datetime
 
 from sqlalchemy import (
@@ -26,7 +27,9 @@ class Food(Base):
     __tablename__ = "foods"
 
     # Foreign keys
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    user_id = Column(
+        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
+    )
 
     # Meal info
     meal_date = Column(Date, nullable=False)
@@ -53,11 +56,16 @@ class Food(Base):
 
     # Constraints
     __table_args__ = (
-        CheckConstraint("meal_type IN ('breakfast', 'lunch', 'dinner', 'snack')", name="ck_food_meal_type"),
+        CheckConstraint(
+            "meal_type IN ('breakfast', 'lunch', 'dinner', 'snack')",
+            name="ck_food_meal_type",
+        ),
     )
 
     # Relationships
     user = relationship("User", back_populates="foods")
 
     def __repr__(self) -> str:
-        return f"<Food(id={self.id}, name={self.food_name}, meal_type={self.meal_type})>"
+        return (
+            f"<Food(id={self.id}, name={self.food_name}, meal_type={self.meal_type})>"
+        )

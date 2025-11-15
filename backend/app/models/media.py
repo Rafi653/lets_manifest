@@ -1,9 +1,18 @@
 """
 Media model for file uploads and media management.
 """
+
 from datetime import datetime
 
-from sqlalchemy import BigInteger, Boolean, Column, DateTime, ForeignKey, Integer, String
+from sqlalchemy import (
+    BigInteger,
+    Boolean,
+    Column,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
@@ -16,7 +25,9 @@ class Media(Base):
     __tablename__ = "media"
 
     # Foreign keys
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    user_id = Column(
+        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
+    )
 
     # File info
     file_name = Column(String(255), nullable=False)
@@ -43,4 +54,6 @@ class Media(Base):
     user = relationship("User", back_populates="media")
 
     def __repr__(self) -> str:
-        return f"<Media(id={self.id}, filename={self.file_name}, type={self.file_type})>"
+        return (
+            f"<Media(id={self.id}, filename={self.file_name}, type={self.file_type})>"
+        )

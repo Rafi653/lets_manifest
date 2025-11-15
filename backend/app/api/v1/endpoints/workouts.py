@@ -1,6 +1,7 @@
 """
 Workout endpoints.
 """
+
 from datetime import date
 from typing import Optional
 from uuid import UUID
@@ -19,7 +20,9 @@ from app.services.module_services import WorkoutService
 router = APIRouter()
 
 
-@router.post("", response_model=APIResponse[WorkoutResponse], status_code=status.HTTP_201_CREATED)
+@router.post(
+    "", response_model=APIResponse[WorkoutResponse], status_code=status.HTTP_201_CREATED
+)
 async def create_workout(
     workout_data: WorkoutCreate,
     current_user: User = Depends(get_current_user),
@@ -30,7 +33,7 @@ async def create_workout(
     workout = await service.create_workout(current_user.id, workout_data)
     return APIResponse(
         data=WorkoutResponse.model_validate(workout),
-        message="Workout created successfully"
+        message="Workout created successfully",
     )
 
 
@@ -50,16 +53,16 @@ async def list_workouts(
     workouts, total = await service.get_user_workouts(
         current_user.id, workout_type, start_date, end_date, skip, limit
     )
-    
+
     return APIResponse(
         data=PaginatedResponse(
             items=[WorkoutResponse.model_validate(w) for w in workouts],
             total=total,
             page=page,
             limit=limit,
-            total_pages=math.ceil(total / limit) if total > 0 else 0
+            total_pages=math.ceil(total / limit) if total > 0 else 0,
         ),
-        message="Workouts retrieved successfully"
+        message="Workouts retrieved successfully",
     )
 
 
@@ -74,7 +77,7 @@ async def get_workout(
     workout = await service.get_workout(workout_id, current_user.id)
     return APIResponse(
         data=WorkoutResponse.model_validate(workout),
-        message="Workout retrieved successfully"
+        message="Workout retrieved successfully",
     )
 
 
@@ -90,7 +93,7 @@ async def update_workout(
     workout = await service.update_workout(workout_id, current_user.id, workout_data)
     return APIResponse(
         data=WorkoutResponse.model_validate(workout),
-        message="Workout updated successfully"
+        message="Workout updated successfully",
     )
 
 
@@ -104,6 +107,5 @@ async def delete_workout(
     service = WorkoutService(db)
     deleted = await service.delete_workout(workout_id, current_user.id)
     return APIResponse(
-        data={"deleted": deleted},
-        message="Workout deleted successfully"
+        data={"deleted": deleted}, message="Workout deleted successfully"
     )

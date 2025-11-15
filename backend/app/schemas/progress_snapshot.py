@@ -1,6 +1,7 @@
 """
 Progress snapshot-related Pydantic schemas.
 """
+
 from datetime import date, datetime
 from decimal import Decimal
 from typing import Optional
@@ -11,6 +12,7 @@ from pydantic import BaseModel, Field
 
 class ProgressSnapshotBase(BaseModel):
     """Base schema for progress snapshot."""
+
     snapshot_date: date
     snapshot_type: str = Field(..., pattern="^(weekly|monthly|yearly)$")
     total_goals: int = Field(default=0, ge=0)
@@ -30,11 +32,13 @@ class ProgressSnapshotBase(BaseModel):
 
 class ProgressSnapshotCreate(ProgressSnapshotBase):
     """Schema for creating progress snapshot."""
+
     pass
 
 
 class ProgressSnapshotUpdate(BaseModel):
     """Schema for updating progress snapshot."""
+
     total_goals: Optional[int] = Field(None, ge=0)
     completed_goals: Optional[int] = Field(None, ge=0)
     active_habits: Optional[int] = Field(None, ge=0)
@@ -52,6 +56,7 @@ class ProgressSnapshotUpdate(BaseModel):
 
 class ProgressSnapshotResponse(ProgressSnapshotBase):
     """Schema for progress snapshot response."""
+
     id: UUID
     user_id: UUID
     created_at: datetime

@@ -1,6 +1,7 @@
 """
 Daily review endpoints.
 """
+
 from datetime import date
 from typing import Optional
 from uuid import UUID
@@ -13,13 +14,21 @@ from app.api.deps import get_current_user
 from app.core.database import get_db
 from app.models.user import User
 from app.schemas.common import APIResponse, PaginatedResponse
-from app.schemas.daily_review import DailyReviewCreate, DailyReviewUpdate, DailyReviewResponse
+from app.schemas.daily_review import (
+    DailyReviewCreate,
+    DailyReviewUpdate,
+    DailyReviewResponse,
+)
 from app.services.module_services import DailyReviewService
 
 router = APIRouter()
 
 
-@router.post("", response_model=APIResponse[DailyReviewResponse], status_code=status.HTTP_201_CREATED)
+@router.post(
+    "",
+    response_model=APIResponse[DailyReviewResponse],
+    status_code=status.HTTP_201_CREATED,
+)
 async def create_daily_review(
     review_data: DailyReviewCreate,
     current_user: User = Depends(get_current_user),
@@ -30,7 +39,7 @@ async def create_daily_review(
     review = await service.create_review(current_user.id, review_data)
     return APIResponse(
         data=DailyReviewResponse.model_validate(review),
-        message="Daily review created successfully"
+        message="Daily review created successfully",
     )
 
 
@@ -49,16 +58,16 @@ async def list_daily_reviews(
     reviews, total = await service.get_user_reviews(
         current_user.id, start_date, end_date, skip, limit
     )
-    
+
     return APIResponse(
         data=PaginatedResponse(
             items=[DailyReviewResponse.model_validate(r) for r in reviews],
             total=total,
             page=page,
             limit=limit,
-            total_pages=math.ceil(total / limit) if total > 0 else 0
+            total_pages=math.ceil(total / limit) if total > 0 else 0,
         ),
-        message="Daily reviews retrieved successfully"
+        message="Daily reviews retrieved successfully",
     )
 
 
@@ -73,7 +82,7 @@ async def get_daily_review(
     review = await service.get_review(review_id, current_user.id)
     return APIResponse(
         data=DailyReviewResponse.model_validate(review),
-        message="Daily review retrieved successfully"
+        message="Daily review retrieved successfully",
     )
 
 
@@ -89,7 +98,7 @@ async def update_daily_review(
     review = await service.update_review(review_id, current_user.id, review_data)
     return APIResponse(
         data=DailyReviewResponse.model_validate(review),
-        message="Daily review updated successfully"
+        message="Daily review updated successfully",
     )
 
 
@@ -103,6 +112,5 @@ async def delete_daily_review(
     service = DailyReviewService(db)
     deleted = await service.delete_review(review_id, current_user.id)
     return APIResponse(
-        data={"deleted": deleted},
-        message="Daily review deleted successfully"
+        data={"deleted": deleted}, message="Daily review deleted successfully"
     )

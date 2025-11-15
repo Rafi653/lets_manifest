@@ -1,6 +1,7 @@
 """
 Base model class for SQLAlchemy models.
 """
+
 from datetime import datetime
 from typing import Any
 from uuid import uuid4
@@ -28,8 +29,7 @@ class CustomBase:
     def to_dict(self) -> dict[str, Any]:
         """Convert model instance to dictionary."""
         return {
-            column.name: getattr(self, column.name)
-            for column in self.__table__.columns
+            column.name: getattr(self, column.name) for column in self.__table__.columns
         }
 
     def __repr__(self) -> str:

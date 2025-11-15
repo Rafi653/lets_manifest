@@ -1,6 +1,7 @@
 """
 Food tracking endpoints.
 """
+
 from datetime import date
 from typing import Optional
 from uuid import UUID
@@ -19,7 +20,9 @@ from app.services.module_services import FoodService
 router = APIRouter()
 
 
-@router.post("", response_model=APIResponse[FoodResponse], status_code=status.HTTP_201_CREATED)
+@router.post(
+    "", response_model=APIResponse[FoodResponse], status_code=status.HTTP_201_CREATED
+)
 async def create_food(
     food_data: FoodCreate,
     current_user: User = Depends(get_current_user),
@@ -30,7 +33,7 @@ async def create_food(
     food = await service.create_food(current_user.id, food_data)
     return APIResponse(
         data=FoodResponse.model_validate(food),
-        message="Food entry created successfully"
+        message="Food entry created successfully",
     )
 
 
@@ -50,16 +53,16 @@ async def list_foods(
     foods, total = await service.get_user_foods(
         current_user.id, meal_type, start_date, end_date, skip, limit
     )
-    
+
     return APIResponse(
         data=PaginatedResponse(
             items=[FoodResponse.model_validate(f) for f in foods],
             total=total,
             page=page,
             limit=limit,
-            total_pages=math.ceil(total / limit) if total > 0 else 0
+            total_pages=math.ceil(total / limit) if total > 0 else 0,
         ),
-        message="Food entries retrieved successfully"
+        message="Food entries retrieved successfully",
     )
 
 
@@ -74,7 +77,7 @@ async def get_food(
     food = await service.get_food(food_id, current_user.id)
     return APIResponse(
         data=FoodResponse.model_validate(food),
-        message="Food entry retrieved successfully"
+        message="Food entry retrieved successfully",
     )
 
 
@@ -90,7 +93,7 @@ async def update_food(
     food = await service.update_food(food_id, current_user.id, food_data)
     return APIResponse(
         data=FoodResponse.model_validate(food),
-        message="Food entry updated successfully"
+        message="Food entry updated successfully",
     )
 
 
@@ -104,6 +107,5 @@ async def delete_food(
     service = FoodService(db)
     deleted = await service.delete_food(food_id, current_user.id)
     return APIResponse(
-        data={"deleted": deleted},
-        message="Food entry deleted successfully"
+        data={"deleted": deleted}, message="Food entry deleted successfully"
     )

@@ -1,6 +1,7 @@
 """
 Blog entry endpoints.
 """
+
 from typing import Optional
 from uuid import UUID
 import math
@@ -18,7 +19,11 @@ from app.services.module_services import BlogEntryService
 router = APIRouter()
 
 
-@router.post("", response_model=APIResponse[BlogEntryResponse], status_code=status.HTTP_201_CREATED)
+@router.post(
+    "",
+    response_model=APIResponse[BlogEntryResponse],
+    status_code=status.HTTP_201_CREATED,
+)
 async def create_blog_entry(
     entry_data: BlogEntryCreate,
     current_user: User = Depends(get_current_user),
@@ -29,7 +34,7 @@ async def create_blog_entry(
     entry = await service.create_blog_entry(current_user.id, entry_data)
     return APIResponse(
         data=BlogEntryResponse.model_validate(entry),
-        message="Blog entry created successfully"
+        message="Blog entry created successfully",
     )
 
 
@@ -47,16 +52,16 @@ async def list_blog_entries(
     entries, total = await service.get_user_blog_entries(
         current_user.id, status_filter, skip, limit
     )
-    
+
     return APIResponse(
         data=PaginatedResponse(
             items=[BlogEntryResponse.model_validate(e) for e in entries],
             total=total,
             page=page,
             limit=limit,
-            total_pages=math.ceil(total / limit) if total > 0 else 0
+            total_pages=math.ceil(total / limit) if total > 0 else 0,
         ),
-        message="Blog entries retrieved successfully"
+        message="Blog entries retrieved successfully",
     )
 
 
@@ -71,7 +76,7 @@ async def get_blog_entry(
     entry = await service.get_blog_entry(entry_id, current_user.id)
     return APIResponse(
         data=BlogEntryResponse.model_validate(entry),
-        message="Blog entry retrieved successfully"
+        message="Blog entry retrieved successfully",
     )
 
 
@@ -87,7 +92,7 @@ async def update_blog_entry(
     entry = await service.update_blog_entry(entry_id, current_user.id, entry_data)
     return APIResponse(
         data=BlogEntryResponse.model_validate(entry),
-        message="Blog entry updated successfully"
+        message="Blog entry updated successfully",
     )
 
 
@@ -101,6 +106,5 @@ async def delete_blog_entry(
     service = BlogEntryService(db)
     deleted = await service.delete_blog_entry(entry_id, current_user.id)
     return APIResponse(
-        data={"deleted": deleted},
-        message="Blog entry deleted successfully"
+        data={"deleted": deleted}, message="Blog entry deleted successfully"
     )

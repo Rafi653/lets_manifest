@@ -1,13 +1,13 @@
 """
 Goal repository for database operations.
 """
+
 from typing import List, Optional
 from uuid import UUID
 from datetime import date
 
 from sqlalchemy import select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import selectinload
 
 from app.models.goal import Goal, GoalProgress
 from app.repositories.base_repository import BaseRepository
@@ -15,50 +15,51 @@ from app.repositories.base_repository import BaseRepository
 
 class GoalRepository(BaseRepository[Goal]):
     """Repository for goal operations."""
-    
+
     def __init__(self, db: AsyncSession):
         super().__init__(db, Goal)
-    
+
     async def get_user_goals(
         self,
         user_id: UUID,
         goal_type: Optional[str] = None,
         status: Optional[str] = None,
         skip: int = 0,
-        limit: int = 100
+        limit: int = 100,
     ) -> List[Goal]:
         """Get all goals for a user with optional filters."""
         query = select(Goal).where(Goal.user_id == user_id)
-        
+
         if goal_type:
             query = query.where(Goal.goal_type == goal_type)
         if status:
             query = query.where(Goal.status == status)
-        
+
         query = query.offset(skip).limit(limit).order_by(Goal.created_at.desc())
-        
+
         result = await self.db.execute(query)
         return list(result.scalars().all())
-    
+
     async def get_goals_by_date_range(
-        self,
-        user_id: UUID,
-        start_date: date,
-        end_date: date
+        self, user_id: UUID, start_date: date, end_date: date
     ) -> List[Goal]:
         """Get goals within a date range."""
         result = await self.db.execute(
-            select(Goal).where(
+            select(Goal)
+            .where(
                 and_(
                     Goal.user_id == user_id,
                     Goal.start_date <= end_date,
-                    Goal.end_date >= start_date
+                    Goal.end_date >= start_date,
                 )
-            ).order_by(Goal.start_date)
+            )
+            .order_by(Goal.start_date)
         )
         return list(result.scalars().all())
-    
-    async def count_user_goals(self, user_id: UUID, status: Optional[str] = None) -> int:
+
+    async def count_user_goals(
+        self, user_id: UUID, status: Optional[str] = None
+    ) -> int:
         """Count goals for a user."""
         query = select(Goal).where(Goal.user_id == user_id)
         if status:
@@ -69,15 +70,12 @@ class GoalRepository(BaseRepository[Goal]):
 
 class GoalProgressRepository(BaseRepository[GoalProgress]):
     """Repository for goal progress operations."""
-    
+
     def __init__(self, db: AsyncSession):
         super().__init__(db, GoalProgress)
-    
+
     async def get_goal_progress(
-        self,
-        goal_id: UUID,
-        skip: int = 0,
-        limit: int = 100
+        self, goal_id: UUID, skip: int = 0, limit: int = 100
     ) -> List[GoalProgress]:
         """Get all progress entries for a goal."""
         result = await self.db.execute(
@@ -88,7 +86,7 @@ class GoalProgressRepository(BaseRepository[GoalProgress]):
             .limit(limit)
         )
         return list(result.scalars().all())
-    
+
     async def get_latest_progress(self, goal_id: UUID) -> Optional[GoalProgress]:
         """Get the latest progress entry for a goal."""
         result = await self.db.execute(

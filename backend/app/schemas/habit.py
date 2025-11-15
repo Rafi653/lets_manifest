@@ -1,6 +1,7 @@
 """
 Habit-related Pydantic schemas.
 """
+
 from datetime import date, datetime, time
 from typing import Optional
 from uuid import UUID
@@ -10,6 +11,7 @@ from pydantic import BaseModel, Field
 
 class HabitBase(BaseModel):
     """Base schema for habit."""
+
     name: str = Field(..., max_length=255)
     description: Optional[str] = None
     frequency: str = Field(..., pattern="^(daily|weekly|custom)$")
@@ -22,11 +24,13 @@ class HabitBase(BaseModel):
 
 class HabitCreate(HabitBase):
     """Schema for creating a habit."""
+
     pass
 
 
 class HabitUpdate(BaseModel):
     """Schema for updating a habit."""
+
     name: Optional[str] = Field(None, max_length=255)
     description: Optional[str] = None
     frequency: Optional[str] = Field(None, pattern="^(daily|weekly|custom)$")
@@ -40,6 +44,7 @@ class HabitUpdate(BaseModel):
 
 class HabitResponse(HabitBase):
     """Schema for habit response."""
+
     id: UUID
     user_id: UUID
     is_active: bool
@@ -55,6 +60,7 @@ class HabitResponse(HabitBase):
 
 class HabitEntryBase(BaseModel):
     """Base schema for habit entry."""
+
     entry_date: date
     completed: bool = False
     notes: Optional[str] = None
@@ -63,11 +69,13 @@ class HabitEntryBase(BaseModel):
 
 class HabitEntryCreate(HabitEntryBase):
     """Schema for creating habit entry."""
+
     pass
 
 
 class HabitEntryUpdate(BaseModel):
     """Schema for updating habit entry."""
+
     completed: Optional[bool] = None
     notes: Optional[str] = None
     mood: Optional[str] = Field(None, max_length=20)
@@ -75,6 +83,7 @@ class HabitEntryUpdate(BaseModel):
 
 class HabitEntryResponse(HabitEntryBase):
     """Schema for habit entry response."""
+
     id: UUID
     habit_id: UUID
     completed_at: Optional[datetime] = None

@@ -1,6 +1,7 @@
 """
 Blog entry-related Pydantic schemas.
 """
+
 from datetime import datetime
 from typing import Optional
 from uuid import UUID
@@ -10,6 +11,7 @@ from pydantic import BaseModel, Field
 
 class BlogEntryBase(BaseModel):
     """Base schema for blog entry."""
+
     title: str = Field(..., max_length=500)
     content: str
     excerpt: Optional[str] = None
@@ -20,11 +22,13 @@ class BlogEntryBase(BaseModel):
 
 class BlogEntryCreate(BlogEntryBase):
     """Schema for creating blog entry."""
+
     pass
 
 
 class BlogEntryUpdate(BaseModel):
     """Schema for updating blog entry."""
+
     title: Optional[str] = Field(None, max_length=500)
     content: Optional[str] = None
     excerpt: Optional[str] = None
@@ -35,6 +39,7 @@ class BlogEntryUpdate(BaseModel):
 
 class BlogEntryResponse(BlogEntryBase):
     """Schema for blog entry response."""
+
     id: UUID
     user_id: UUID
     slug: Optional[str] = None

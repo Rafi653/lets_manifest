@@ -1,6 +1,7 @@
 """
 Workout-related Pydantic schemas.
 """
+
 from datetime import date, datetime, time
 from decimal import Decimal
 from typing import List, Optional
@@ -11,6 +12,7 @@ from pydantic import BaseModel, Field
 
 class WorkoutExerciseBase(BaseModel):
     """Base schema for workout exercise."""
+
     exercise_name: str = Field(..., max_length=255)
     exercise_type: Optional[str] = Field(None, max_length=50)
     sets: Optional[int] = Field(None, ge=0)
@@ -27,11 +29,13 @@ class WorkoutExerciseBase(BaseModel):
 
 class WorkoutExerciseCreate(WorkoutExerciseBase):
     """Schema for creating workout exercise."""
+
     pass
 
 
 class WorkoutExerciseResponse(WorkoutExerciseBase):
     """Schema for workout exercise response."""
+
     id: UUID
     workout_id: UUID
     created_at: datetime
@@ -42,6 +46,7 @@ class WorkoutExerciseResponse(WorkoutExerciseBase):
 
 class WorkoutBase(BaseModel):
     """Base schema for workout."""
+
     workout_date: date
     workout_time: Optional[time] = None
     workout_type: str = Field(..., max_length=50)
@@ -57,11 +62,13 @@ class WorkoutBase(BaseModel):
 
 class WorkoutCreate(WorkoutBase):
     """Schema for creating workout."""
+
     exercises: List[WorkoutExerciseCreate] = []
 
 
 class WorkoutUpdate(BaseModel):
     """Schema for updating workout."""
+
     workout_time: Optional[time] = None
     workout_type: Optional[str] = Field(None, max_length=50)
     workout_name: Optional[str] = Field(None, max_length=255)
@@ -76,6 +83,7 @@ class WorkoutUpdate(BaseModel):
 
 class WorkoutResponse(WorkoutBase):
     """Schema for workout response."""
+
     id: UUID
     user_id: UUID
     created_at: datetime

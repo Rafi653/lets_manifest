@@ -1,6 +1,7 @@
 """
 Habit endpoints.
 """
+
 from typing import Optional
 from uuid import UUID
 import math
@@ -17,14 +18,16 @@ from app.schemas.habit import (
     HabitUpdate,
     HabitResponse,
     HabitEntryCreate,
-    HabitEntryResponse
+    HabitEntryResponse,
 )
 from app.services.module_services import HabitService
 
 router = APIRouter()
 
 
-@router.post("", response_model=APIResponse[HabitResponse], status_code=status.HTTP_201_CREATED)
+@router.post(
+    "", response_model=APIResponse[HabitResponse], status_code=status.HTTP_201_CREATED
+)
 async def create_habit(
     habit_data: HabitCreate,
     current_user: User = Depends(get_current_user),
@@ -34,8 +37,7 @@ async def create_habit(
     service = HabitService(db)
     habit = await service.create_habit(current_user.id, habit_data)
     return APIResponse(
-        data=HabitResponse.model_validate(habit),
-        message="Habit created successfully"
+        data=HabitResponse.model_validate(habit), message="Habit created successfully"
     )
 
 
@@ -50,17 +52,19 @@ async def list_habits(
     """List all habits for the current user."""
     service = HabitService(db)
     skip = (page - 1) * limit
-    habits, total = await service.get_user_habits(current_user.id, is_active, skip, limit)
-    
+    habits, total = await service.get_user_habits(
+        current_user.id, is_active, skip, limit
+    )
+
     return APIResponse(
         data=PaginatedResponse(
             items=[HabitResponse.model_validate(h) for h in habits],
             total=total,
             page=page,
             limit=limit,
-            total_pages=math.ceil(total / limit) if total > 0 else 0
+            total_pages=math.ceil(total / limit) if total > 0 else 0,
         ),
-        message="Habits retrieved successfully"
+        message="Habits retrieved successfully",
     )
 
 
@@ -74,8 +78,7 @@ async def get_habit(
     service = HabitService(db)
     habit = await service.get_habit(habit_id, current_user.id)
     return APIResponse(
-        data=HabitResponse.model_validate(habit),
-        message="Habit retrieved successfully"
+        data=HabitResponse.model_validate(habit), message="Habit retrieved successfully"
     )
 
 
@@ -90,8 +93,7 @@ async def update_habit(
     service = HabitService(db)
     habit = await service.update_habit(habit_id, current_user.id, habit_data)
     return APIResponse(
-        data=HabitResponse.model_validate(habit),
-        message="Habit updated successfully"
+        data=HabitResponse.model_validate(habit), message="Habit updated successfully"
     )
 
 
@@ -104,13 +106,14 @@ async def delete_habit(
     """Delete a habit."""
     service = HabitService(db)
     deleted = await service.delete_habit(habit_id, current_user.id)
-    return APIResponse(
-        data={"deleted": deleted},
-        message="Habit deleted successfully"
-    )
+    return APIResponse(data={"deleted": deleted}, message="Habit deleted successfully")
 
 
-@router.post("/{habit_id}/entries", response_model=APIResponse[HabitEntryResponse], status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/{habit_id}/entries",
+    response_model=APIResponse[HabitEntryResponse],
+    status_code=status.HTTP_201_CREATED,
+)
 async def create_habit_entry(
     habit_id: UUID,
     entry_data: HabitEntryCreate,
@@ -122,7 +125,7 @@ async def create_habit_entry(
     entry = await service.create_entry(habit_id, current_user.id, entry_data)
     return APIResponse(
         data=HabitEntryResponse.model_validate(entry),
-        message="Habit entry created successfully"
+        message="Habit entry created successfully",
     )
 
 
@@ -140,5 +143,5 @@ async def get_habit_entries(
     entries = await service.get_habit_entries(habit_id, current_user.id, skip, limit)
     return APIResponse(
         data=[HabitEntryResponse.model_validate(e) for e in entries],
-        message="Habit entries retrieved successfully"
+        message="Habit entries retrieved successfully",
     )

@@ -1,6 +1,7 @@
 """
 User-related Pydantic schemas.
 """
+
 from datetime import datetime
 from typing import Optional
 from uuid import UUID
@@ -11,6 +12,7 @@ from pydantic import BaseModel, EmailStr, Field
 # User creation/registration schemas
 class UserCreate(BaseModel):
     """Schema for user registration."""
+
     email: EmailStr
     username: str = Field(..., min_length=3, max_length=100)
     password: str = Field(..., min_length=8, max_length=100)
@@ -20,6 +22,7 @@ class UserCreate(BaseModel):
 
 class UserUpdate(BaseModel):
     """Schema for updating user profile."""
+
     first_name: Optional[str] = Field(None, max_length=100)
     last_name: Optional[str] = Field(None, max_length=100)
     avatar_url: Optional[str] = Field(None, max_length=500)
@@ -29,6 +32,7 @@ class UserUpdate(BaseModel):
 
 class UserResponse(BaseModel):
     """Schema for user response."""
+
     id: UUID
     email: EmailStr
     username: str
@@ -50,12 +54,14 @@ class UserResponse(BaseModel):
 # Authentication schemas
 class LoginRequest(BaseModel):
     """Schema for login request."""
+
     email: EmailStr
     password: str
 
 
 class TokenResponse(BaseModel):
     """Schema for token response."""
+
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
@@ -64,4 +70,5 @@ class TokenResponse(BaseModel):
 
 class RefreshTokenRequest(BaseModel):
     """Schema for refresh token request."""
+
     refresh_token: str

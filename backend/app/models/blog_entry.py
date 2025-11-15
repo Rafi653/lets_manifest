@@ -1,6 +1,7 @@
 """
 Blog entry model for blog posts and journal entries.
 """
+
 from datetime import datetime
 
 from sqlalchemy import (
@@ -24,7 +25,9 @@ class BlogEntry(Base):
     __tablename__ = "blog_entries"
 
     # Foreign keys
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    user_id = Column(
+        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
+    )
 
     # Content
     title = Column(String(500), nullable=False)
@@ -46,7 +49,9 @@ class BlogEntry(Base):
 
     # Constraints
     __table_args__ = (
-        CheckConstraint("status IN ('draft', 'published', 'archived')", name="ck_blog_status"),
+        CheckConstraint(
+            "status IN ('draft', 'published', 'archived')", name="ck_blog_status"
+        ),
     )
 
     # Relationships

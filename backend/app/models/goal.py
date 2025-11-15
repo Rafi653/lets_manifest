@@ -1,6 +1,7 @@
 """
 Goal and goal progress models for goal tracking.
 """
+
 from datetime import datetime
 from decimal import Decimal
 
@@ -27,7 +28,9 @@ class Goal(Base):
     __tablename__ = "goals"
 
     # Foreign keys
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    user_id = Column(
+        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
+    )
     parent_goal_id = Column(UUID(as_uuid=True), ForeignKey("goals.id"), index=True)
 
     # Basic info
@@ -59,14 +62,21 @@ class Goal(Base):
 
     # Constraints
     __table_args__ = (
-        CheckConstraint("goal_type IN ('daily', 'weekly', 'monthly', 'yearly')", name="ck_goal_type"),
-        CheckConstraint("status IN ('active', 'completed', 'cancelled', 'paused')", name="ck_goal_status"),
+        CheckConstraint(
+            "goal_type IN ('daily', 'weekly', 'monthly', 'yearly')", name="ck_goal_type"
+        ),
+        CheckConstraint(
+            "status IN ('active', 'completed', 'cancelled', 'paused')",
+            name="ck_goal_status",
+        ),
         CheckConstraint("priority >= 0 AND priority <= 5", name="ck_goal_priority"),
     )
 
     # Relationships
     user = relationship("User", back_populates="goals")
-    progress_entries = relationship("GoalProgress", back_populates="goal", cascade="all, delete-orphan")
+    progress_entries = relationship(
+        "GoalProgress", back_populates="goal", cascade="all, delete-orphan"
+    )
     parent_goal = relationship("Goal", remote_side="Goal.id", backref="sub_goals")
 
     def __repr__(self) -> str:
@@ -79,7 +89,9 @@ class GoalProgress(Base):
     __tablename__ = "goal_progress"
 
     # Foreign keys
-    goal_id = Column(UUID(as_uuid=True), ForeignKey("goals.id"), nullable=False, index=True)
+    goal_id = Column(
+        UUID(as_uuid=True), ForeignKey("goals.id"), nullable=False, index=True
+    )
 
     # Progress data
     progress_date = Column(Date, nullable=False)

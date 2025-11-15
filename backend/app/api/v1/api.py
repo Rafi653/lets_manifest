@@ -1,6 +1,7 @@
 """
 API v1 router aggregation.
 """
+
 from fastapi import APIRouter
 
 from app.api.v1.endpoints import (
@@ -28,6 +29,12 @@ api_router.include_router(goals.router, prefix="/goals", tags=["Goals"])
 api_router.include_router(habits.router, prefix="/habits", tags=["Habits"])
 api_router.include_router(foods.router, prefix="/foods", tags=["Food Tracking"])
 api_router.include_router(workouts.router, prefix="/workouts", tags=["Workouts"])
-api_router.include_router(daily_reviews.router, prefix="/daily-reviews", tags=["Daily Reviews"])
-api_router.include_router(blog_entries.router, prefix="/blog-entries", tags=["Blog Entries"])
-api_router.include_router(progress.router, prefix="/progress", tags=["Progress Tracking"])
+api_router.include_router(
+    daily_reviews.router, prefix="/daily-reviews", tags=["Daily Reviews"]
+)
+api_router.include_router(
+    blog_entries.router, prefix="/blog-entries", tags=["Blog Entries"]
+)
+api_router.include_router(
+    progress.router, prefix="/progress", tags=["Progress Tracking"]
+)

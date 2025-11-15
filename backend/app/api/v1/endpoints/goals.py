@@ -1,6 +1,7 @@
 """
 Goal endpoints.
 """
+
 from typing import Optional
 from uuid import UUID
 
@@ -16,7 +17,7 @@ from app.schemas.goal import (
     GoalUpdate,
     GoalResponse,
     GoalProgressCreate,
-    GoalProgressResponse
+    GoalProgressResponse,
 )
 from app.services.goal_service import GoalService
 import math
@@ -24,7 +25,9 @@ import math
 router = APIRouter()
 
 
-@router.post("", response_model=APIResponse[GoalResponse], status_code=status.HTTP_201_CREATED)
+@router.post(
+    "", response_model=APIResponse[GoalResponse], status_code=status.HTTP_201_CREATED
+)
 async def create_goal(
     goal_data: GoalCreate,
     current_user: User = Depends(get_current_user),
@@ -32,7 +35,7 @@ async def create_goal(
 ):
     """
     Create a new goal.
-    
+
     - **title**: Goal title (required)
     - **description**: Optional description
     - **goal_type**: Type of goal (daily/weekly/monthly/yearly)
@@ -43,10 +46,9 @@ async def create_goal(
     """
     service = GoalService(db)
     goal = await service.create_goal(current_user.id, goal_data)
-    
+
     return APIResponse(
-        data=GoalResponse.model_validate(goal),
-        message="Goal created successfully"
+        data=GoalResponse.model_validate(goal), message="Goal created successfully"
     )
 
 
@@ -61,7 +63,7 @@ async def list_goals(
 ):
     """
     List all goals for the current user with pagination and filtering.
-    
+
     Query parameters:
     - **goal_type**: Filter by type (daily/weekly/monthly/yearly)
     - **status_filter**: Filter by status (active/completed/cancelled/paused)
@@ -73,18 +75,18 @@ async def list_goals(
     goals, total = await service.get_user_goals(
         current_user.id, goal_type, status_filter, skip, limit
     )
-    
+
     goal_responses = [GoalResponse.model_validate(goal) for goal in goals]
-    
+
     return APIResponse(
         data=PaginatedResponse(
             items=goal_responses,
             total=total,
             page=page,
             limit=limit,
-            total_pages=math.ceil(total / limit) if total > 0 else 0
+            total_pages=math.ceil(total / limit) if total > 0 else 0,
         ),
-        message="Goals retrieved successfully"
+        message="Goals retrieved successfully",
     )
 
 
@@ -97,10 +99,9 @@ async def get_goal(
     """Get a specific goal by ID."""
     service = GoalService(db)
     goal = await service.get_goal(goal_id, current_user.id)
-    
+
     return APIResponse(
-        data=GoalResponse.model_validate(goal),
-        message="Goal retrieved successfully"
+        data=GoalResponse.model_validate(goal), message="Goal retrieved successfully"
     )
 
 
@@ -113,19 +114,20 @@ async def update_goal(
 ):
     """
     Update a goal.
-    
+
     All fields are optional. Only provided fields will be updated.
     """
     service = GoalService(db)
     goal = await service.update_goal(goal_id, current_user.id, goal_data)
-    
+
     return APIResponse(
-        data=GoalResponse.model_validate(goal),
-        message="Goal updated successfully"
+        data=GoalResponse.model_validate(goal), message="Goal updated successfully"
     )
 
 
-@router.delete("/{goal_id}", response_model=APIResponse[dict], status_code=status.HTTP_200_OK)
+@router.delete(
+    "/{goal_id}", response_model=APIResponse[dict], status_code=status.HTTP_200_OK
+)
 async def delete_goal(
     goal_id: UUID,
     current_user: User = Depends(get_current_user),
@@ -134,14 +136,15 @@ async def delete_goal(
     """Delete a goal."""
     service = GoalService(db)
     deleted = await service.delete_goal(goal_id, current_user.id)
-    
-    return APIResponse(
-        data={"deleted": deleted},
-        message="Goal deleted successfully"
-    )
+
+    return APIResponse(data={"deleted": deleted}, message="Goal deleted successfully")
 
 
-@router.post("/{goal_id}/progress", response_model=APIResponse[GoalProgressResponse], status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/{goal_id}/progress",
+    response_model=APIResponse[GoalProgressResponse],
+    status_code=status.HTTP_201_CREATED,
+)
 async def add_goal_progress(
     goal_id: UUID,
     progress_data: GoalProgressCreate,
@@ -150,21 +153,23 @@ async def add_goal_progress(
 ):
     """
     Add progress to a goal.
-    
+
     - **progress_date**: Date of progress entry
     - **value**: Progress value
     - **notes**: Optional notes
     """
     service = GoalService(db)
     progress = await service.add_progress(goal_id, current_user.id, progress_data)
-    
+
     return APIResponse(
         data=GoalProgressResponse.model_validate(progress),
-        message="Progress added successfully"
+        message="Progress added successfully",
     )
 
 
-@router.get("/{goal_id}/progress", response_model=APIResponse[list[GoalProgressResponse]])
+@router.get(
+    "/{goal_id}/progress", response_model=APIResponse[list[GoalProgressResponse]]
+)
 async def get_goal_progress(
     goal_id: UUID,
     page: int = Query(1, ge=1),
@@ -175,9 +180,11 @@ async def get_goal_progress(
     """Get progress entries for a goal."""
     service = GoalService(db)
     skip = (page - 1) * limit
-    progress_entries = await service.get_goal_progress(goal_id, current_user.id, skip, limit)
-    
+    progress_entries = await service.get_goal_progress(
+        goal_id, current_user.id, skip, limit
+    )
+
     return APIResponse(
         data=[GoalProgressResponse.model_validate(p) for p in progress_entries],
-        message="Progress entries retrieved successfully"
+        message="Progress entries retrieved successfully",
     )

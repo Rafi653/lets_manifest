@@ -1,6 +1,7 @@
 """
 User endpoints.
 """
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -20,12 +21,12 @@ async def get_current_user_profile(
 ):
     """
     Get current user profile.
-    
+
     Requires authentication.
     """
     return APIResponse(
         data=UserResponse.model_validate(current_user),
-        message="User profile retrieved successfully"
+        message="User profile retrieved successfully",
     )
 
 
@@ -37,21 +38,21 @@ async def update_current_user_profile(
 ):
     """
     Update current user profile.
-    
+
     - **first_name**: Optional first name
     - **last_name**: Optional last name
     - **avatar_url**: Optional avatar URL
     - **bio**: Optional bio text
     - **timezone**: Optional timezone
-    
+
     Requires authentication.
     """
     service = UserService(db)
     updated_user = await service.update_user(current_user.id, user_data)
-    
+
     return APIResponse(
         data=UserResponse.model_validate(updated_user),
-        message="User profile updated successfully"
+        message="User profile updated successfully",
     )
 
 
@@ -62,20 +63,19 @@ async def delete_current_user_account(
 ):
     """
     Delete current user account.
-    
+
     This action is irreversible.
     Requires authentication.
     """
     service = UserService(db)
     deleted = await service.delete_user(current_user.id)
-    
+
     if not deleted:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to delete user account"
+            detail="Failed to delete user account",
         )
-    
+
     return APIResponse(
-        data={"deleted": True},
-        message="User account deleted successfully"
+        data={"deleted": True}, message="User account deleted successfully"
     )

@@ -1,6 +1,7 @@
 """
 Goal-related Pydantic schemas.
 """
+
 from datetime import date, datetime
 from decimal import Decimal
 from typing import Optional
@@ -11,6 +12,7 @@ from pydantic import BaseModel, Field
 
 class GoalBase(BaseModel):
     """Base schema for goal."""
+
     title: str = Field(..., max_length=255)
     description: Optional[str] = None
     goal_type: str = Field(..., pattern="^(daily|weekly|monthly|yearly)$")
@@ -27,11 +29,13 @@ class GoalBase(BaseModel):
 
 class GoalCreate(GoalBase):
     """Schema for creating a goal."""
+
     pass
 
 
 class GoalUpdate(BaseModel):
     """Schema for updating a goal."""
+
     title: Optional[str] = Field(None, max_length=255)
     description: Optional[str] = None
     category: Optional[str] = Field(None, max_length=50)
@@ -45,6 +49,7 @@ class GoalUpdate(BaseModel):
 
 class GoalResponse(GoalBase):
     """Schema for goal response."""
+
     id: UUID
     user_id: UUID
     current_value: Decimal
@@ -59,6 +64,7 @@ class GoalResponse(GoalBase):
 
 class GoalProgressBase(BaseModel):
     """Base schema for goal progress."""
+
     progress_date: date
     value: Decimal
     notes: Optional[str] = None
@@ -66,11 +72,13 @@ class GoalProgressBase(BaseModel):
 
 class GoalProgressCreate(GoalProgressBase):
     """Schema for creating goal progress."""
+
     pass
 
 
 class GoalProgressResponse(GoalProgressBase):
     """Schema for goal progress response."""
+
     id: UUID
     goal_id: UUID
     percentage: Optional[Decimal] = None

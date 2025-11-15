@@ -1,6 +1,7 @@
 """
 Progress snapshot endpoints.
 """
+
 from typing import Optional
 from uuid import UUID
 import math
@@ -12,13 +13,21 @@ from app.api.deps import get_current_user
 from app.core.database import get_db
 from app.models.user import User
 from app.schemas.common import APIResponse, PaginatedResponse
-from app.schemas.progress_snapshot import ProgressSnapshotCreate, ProgressSnapshotUpdate, ProgressSnapshotResponse
+from app.schemas.progress_snapshot import (
+    ProgressSnapshotCreate,
+    ProgressSnapshotUpdate,
+    ProgressSnapshotResponse,
+)
 from app.services.module_services import ProgressSnapshotService
 
 router = APIRouter()
 
 
-@router.post("", response_model=APIResponse[ProgressSnapshotResponse], status_code=status.HTTP_201_CREATED)
+@router.post(
+    "",
+    response_model=APIResponse[ProgressSnapshotResponse],
+    status_code=status.HTTP_201_CREATED,
+)
 async def create_progress_snapshot(
     snapshot_data: ProgressSnapshotCreate,
     current_user: User = Depends(get_current_user),
@@ -29,7 +38,7 @@ async def create_progress_snapshot(
     snapshot = await service.create_snapshot(current_user.id, snapshot_data)
     return APIResponse(
         data=ProgressSnapshotResponse.model_validate(snapshot),
-        message="Progress snapshot created successfully"
+        message="Progress snapshot created successfully",
     )
 
 
@@ -47,16 +56,16 @@ async def list_progress_snapshots(
     snapshots, total = await service.get_user_snapshots(
         current_user.id, snapshot_type, skip, limit
     )
-    
+
     return APIResponse(
         data=PaginatedResponse(
             items=[ProgressSnapshotResponse.model_validate(s) for s in snapshots],
             total=total,
             page=page,
             limit=limit,
-            total_pages=math.ceil(total / limit) if total > 0 else 0
+            total_pages=math.ceil(total / limit) if total > 0 else 0,
         ),
-        message="Progress snapshots retrieved successfully"
+        message="Progress snapshots retrieved successfully",
     )
 
 
@@ -71,7 +80,7 @@ async def get_progress_snapshot(
     snapshot = await service.get_snapshot(snapshot_id, current_user.id)
     return APIResponse(
         data=ProgressSnapshotResponse.model_validate(snapshot),
-        message="Progress snapshot retrieved successfully"
+        message="Progress snapshot retrieved successfully",
     )
 
 
@@ -84,10 +93,12 @@ async def update_progress_snapshot(
 ):
     """Update a progress snapshot."""
     service = ProgressSnapshotService(db)
-    snapshot = await service.update_snapshot(snapshot_id, current_user.id, snapshot_data)
+    snapshot = await service.update_snapshot(
+        snapshot_id, current_user.id, snapshot_data
+    )
     return APIResponse(
         data=ProgressSnapshotResponse.model_validate(snapshot),
-        message="Progress snapshot updated successfully"
+        message="Progress snapshot updated successfully",
     )
 
 
@@ -101,6 +112,5 @@ async def delete_progress_snapshot(
     service = ProgressSnapshotService(db)
     deleted = await service.delete_snapshot(snapshot_id, current_user.id)
     return APIResponse(
-        data={"deleted": deleted},
-        message="Progress snapshot deleted successfully"
+        data={"deleted": deleted}, message="Progress snapshot deleted successfully"
     )

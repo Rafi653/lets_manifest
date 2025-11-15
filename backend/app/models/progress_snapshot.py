@@ -1,6 +1,7 @@
 """
 Progress snapshot model for long-term progress tracking.
 """
+
 from sqlalchemy import (
     CheckConstraint,
     Column,
@@ -23,7 +24,9 @@ class ProgressSnapshot(Base):
     __tablename__ = "progress_snapshots"
 
     # Foreign keys
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    user_id = Column(
+        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
+    )
 
     # Snapshot info
     snapshot_date = Column(Date, nullable=False)
@@ -58,9 +61,13 @@ class ProgressSnapshot(Base):
 
     # Constraints
     __table_args__ = (
-        CheckConstraint("snapshot_type IN ('weekly', 'monthly', 'yearly')", name="ck_snapshot_type"),
+        CheckConstraint(
+            "snapshot_type IN ('weekly', 'monthly', 'yearly')", name="ck_snapshot_type"
+        ),
         CheckConstraint("weight_unit IN ('lbs', 'kg')", name="ck_snapshot_weight_unit"),
-        UniqueConstraint("user_id", "snapshot_date", "snapshot_type", name="uq_user_snapshot"),
+        UniqueConstraint(
+            "user_id", "snapshot_date", "snapshot_type", name="uq_user_snapshot"
+        ),
     )
 
     # Relationships

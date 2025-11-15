@@ -1,6 +1,7 @@
 """
 Main FastAPI application entry point.
 """
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -33,8 +34,7 @@ app.add_middleware(
 async def root():
     """Root endpoint."""
     return APIResponse(
-        data={"message": "Welcome to Let's Manifest API"},
-        message="API is running"
+        data={"message": "Welcome to Let's Manifest API"}, message="API is running"
     )
 
 
@@ -42,11 +42,8 @@ async def root():
 async def health_check():
     """Health check endpoint."""
     return APIResponse(
-        data=HealthCheck(
-            status="healthy",
-            version=settings.APP_VERSION
-        ),
-        message="Service is healthy"
+        data=HealthCheck(status="healthy", version=settings.APP_VERSION),
+        message="Service is healthy",
     )
 
 
@@ -64,11 +61,8 @@ async def not_found_handler(request, exc):
             "data": None,
             "message": "Resource not found",
             "errors": None,
-            "meta": {
-                "timestamp": None,
-                "request_id": None
-            }
-        }
+            "meta": {"timestamp": None, "request_id": None},
+        },
     )
 
 
@@ -81,19 +75,12 @@ async def internal_error_handler(request, exc):
             "data": None,
             "message": "Internal server error",
             "errors": None,
-            "meta": {
-                "timestamp": None,
-                "request_id": None
-            }
-        }
+            "meta": {"timestamp": None, "request_id": None},
+        },
     )
 
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(
-        "app.main:app",
-        host="0.0.0.0",
-        port=8000,
-        reload=settings.DEBUG
-    )
+
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=settings.DEBUG)

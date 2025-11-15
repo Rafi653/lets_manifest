@@ -1,6 +1,7 @@
 """
 Food-related Pydantic schemas.
 """
+
 from datetime import date, datetime, time
 from decimal import Decimal
 from typing import Optional
@@ -11,6 +12,7 @@ from pydantic import BaseModel, Field
 
 class FoodBase(BaseModel):
     """Base schema for food tracking."""
+
     meal_date: date
     meal_time: Optional[time] = None
     meal_type: str = Field(..., pattern="^(breakfast|lunch|dinner|snack)$")
@@ -29,11 +31,13 @@ class FoodBase(BaseModel):
 
 class FoodCreate(FoodBase):
     """Schema for creating food entry."""
+
     pass
 
 
 class FoodUpdate(BaseModel):
     """Schema for updating food entry."""
+
     meal_time: Optional[time] = None
     food_name: Optional[str] = Field(None, max_length=255)
     portion_size: Optional[str] = Field(None, max_length=100)
@@ -50,6 +54,7 @@ class FoodUpdate(BaseModel):
 
 class FoodResponse(FoodBase):
     """Schema for food response."""
+
     id: UUID
     user_id: UUID
     created_at: datetime
