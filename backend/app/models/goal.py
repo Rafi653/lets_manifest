@@ -23,7 +23,7 @@ from .base import Base
 
 
 class Goal(Base):
-    """Goal model for tracking daily, weekly, monthly, and yearly goals."""
+    """Goal model for tracking daily, weekly, monthly, yearly, and life goals."""
 
     __tablename__ = "goals"
 
@@ -44,9 +44,9 @@ class Goal(Base):
     target_unit = Column(String(50))
     current_value = Column(Numeric(10, 2), default=Decimal("0"))
 
-    # Dates
-    start_date = Column(Date, nullable=False)
-    end_date = Column(Date, nullable=False)
+    # Dates (nullable for life goals without specific deadlines)
+    start_date = Column(Date, nullable=True)
+    end_date = Column(Date, nullable=True)
 
     # Status and priority
     status = Column(String(20), default="active")
@@ -68,10 +68,11 @@ class Goal(Base):
     # Constraints
     __table_args__ = (
         CheckConstraint(
-            "goal_type IN ('daily', 'weekly', 'monthly', 'yearly')", name="ck_goal_type"
+            "goal_type IN ('daily', 'weekly', 'monthly', 'yearly', 'life_goal')",
+            name="ck_goal_type",
         ),
         CheckConstraint(
-            "status IN ('active', 'completed', 'cancelled', 'paused')",
+            "status IN ('active', 'completed', 'cancelled', 'paused', 'in_progress')",
             name="ck_goal_status",
         ),
         CheckConstraint("priority >= 0 AND priority <= 5", name="ck_goal_priority"),
@@ -81,6 +82,9 @@ class Goal(Base):
     user = relationship("User", back_populates="goals")
     progress_entries = relationship(
         "GoalProgress", back_populates="goal", cascade="all, delete-orphan"
+    )
+    milestones = relationship(
+        "GoalMilestone", back_populates="goal", cascade="all, delete-orphan"
     )
     parent_goal = relationship("Goal", remote_side="Goal.id", backref="sub_goals")
     notifications = relationship(
@@ -112,3 +116,40 @@ class GoalProgress(Base):
 
     def __repr__(self) -> str:
         return f"<GoalProgress(id={self.id}, goal_id={self.goal_id}, date={self.progress_date})>"
+
+
+class GoalMilestone(Base):
+    """Goal milestone/checkpoint model for life goals."""
+
+    __tablename__ = "goal_milestones"
+
+    # Foreign keys
+    goal_id = Column(
+        UUID(as_uuid=True), ForeignKey("goals.id"), nullable=False, index=True
+    )
+
+    # Milestone data
+    title = Column(String(255), nullable=False)
+    description = Column(String)
+    order_index = Column(Integer, default=0)
+    status = Column(String(20), default="pending")
+    target_date = Column(Date)
+
+    # Timestamps
+    completed_at = Column(DateTime)
+
+    # Constraints
+    __table_args__ = (
+        CheckConstraint(
+            "status IN ('pending', 'in_progress', 'completed', 'skipped')",
+            name="ck_milestone_status",
+        ),
+    )
+
+    # Relationships
+    goal = relationship("Goal", back_populates="milestones")
+
+    def __repr__(self) -> str:
+        return (
+            f"<GoalMilestone(id={self.id}, goal_id={self.goal_id}, title={self.title})>"
+        )

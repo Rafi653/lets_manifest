@@ -9,7 +9,7 @@ from datetime import date
 from sqlalchemy import select, and_
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.goal import Goal, GoalProgress
+from app.models.goal import Goal, GoalProgress, GoalMilestone
 from app.repositories.base_repository import BaseRepository
 
 
@@ -96,3 +96,35 @@ class GoalProgressRepository(BaseRepository[GoalProgress]):
             .limit(1)
         )
         return result.scalar_one_or_none()
+
+
+class GoalMilestoneRepository(BaseRepository[GoalMilestone]):
+    """Repository for goal milestone operations."""
+
+    def __init__(self, db: AsyncSession):
+        super().__init__(db, GoalMilestone)
+
+    async def get_goal_milestones(
+        self, goal_id: UUID, skip: int = 0, limit: int = 100
+    ) -> List[GoalMilestone]:
+        """Get all milestones for a goal."""
+        result = await self.db.execute(
+            select(GoalMilestone)
+            .where(GoalMilestone.goal_id == goal_id)
+            .order_by(GoalMilestone.order_index.asc())
+            .offset(skip)
+            .limit(limit)
+        )
+        return list(result.scalars().all())
+
+    async def count_completed_milestones(self, goal_id: UUID) -> int:
+        """Count completed milestones for a goal."""
+        result = await self.db.execute(
+            select(GoalMilestone).where(
+                and_(
+                    GoalMilestone.goal_id == goal_id,
+                    GoalMilestone.status == "completed",
+                )
+            )
+        )
+        return len(list(result.scalars().all()))

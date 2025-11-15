@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import MainLayout from '../components/layout/MainLayout';
 import Dashboard from '../pages/Dashboard';
 import Goals from '../pages/Goals';
+import LifeGoals from '../pages/LifeGoals';
 import Habits from '../pages/Habits';
 import Food from '../pages/Food';
 import Workouts from '../pages/Workouts';
@@ -21,6 +22,10 @@ const router = createBrowserRouter([
       {
         path: 'goals',
         element: <Goals />,
+      },
+      {
+        path: 'life-goals',
+        element: <LifeGoals />,
       },
       {
         path: 'habits',

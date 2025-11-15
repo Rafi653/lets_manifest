@@ -15,12 +15,12 @@ class GoalBase(BaseModel):
 
     title: str = Field(..., max_length=255)
     description: Optional[str] = None
-    goal_type: str = Field(..., pattern="^(daily|weekly|monthly|yearly)$")
+    goal_type: str = Field(..., pattern="^(daily|weekly|monthly|yearly|life_goal)$")
     category: Optional[str] = Field(None, max_length=50)
     target_value: Optional[Decimal] = None
     target_unit: Optional[str] = Field(None, max_length=50)
-    start_date: date
-    end_date: date
+    start_date: Optional[date] = None
+    end_date: Optional[date] = None
     priority: int = Field(default=0, ge=0, le=5)
     is_recurring: bool = False
     recurrence_pattern: Optional[str] = Field(None, max_length=50)
@@ -47,7 +47,9 @@ class GoalUpdate(BaseModel):
     target_value: Optional[Decimal] = None
     target_unit: Optional[str] = Field(None, max_length=50)
     end_date: Optional[date] = None
-    status: Optional[str] = Field(None, pattern="^(active|completed|cancelled|paused)$")
+    status: Optional[str] = Field(
+        None, pattern="^(active|completed|cancelled|paused|in_progress)$"
+    )
     priority: Optional[int] = Field(None, ge=0, le=5)
     current_value: Optional[Decimal] = None
     reminder_enabled: Optional[bool] = None
@@ -93,6 +95,46 @@ class GoalProgressResponse(GoalProgressBase):
     goal_id: UUID
     percentage: Optional[Decimal] = None
     created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
+class GoalMilestoneBase(BaseModel):
+    """Base schema for goal milestone."""
+
+    title: str = Field(..., max_length=255)
+    description: Optional[str] = None
+    order_index: int = Field(default=0, ge=0)
+    target_date: Optional[date] = None
+
+
+class GoalMilestoneCreate(GoalMilestoneBase):
+    """Schema for creating a goal milestone."""
+
+    pass
+
+
+class GoalMilestoneUpdate(BaseModel):
+    """Schema for updating a goal milestone."""
+
+    title: Optional[str] = Field(None, max_length=255)
+    description: Optional[str] = None
+    order_index: Optional[int] = Field(None, ge=0)
+    status: Optional[str] = Field(
+        None, pattern="^(pending|in_progress|completed|skipped)$"
+    )
+    target_date: Optional[date] = None
+
+
+class GoalMilestoneResponse(GoalMilestoneBase):
+    """Schema for goal milestone response."""
+
+    id: UUID
+    goal_id: UUID
+    status: str
+    created_at: datetime
+    completed_at: Optional[datetime] = None
 
     class Config:
         from_attributes = True

@@ -18,6 +18,9 @@ from app.schemas.goal import (
     GoalResponse,
     GoalProgressCreate,
     GoalProgressResponse,
+    GoalMilestoneCreate,
+    GoalMilestoneUpdate,
+    GoalMilestoneResponse,
 )
 from app.services.goal_service import GoalService
 import math
@@ -187,4 +190,102 @@ async def get_goal_progress(
     return APIResponse(
         data=[GoalProgressResponse.model_validate(p) for p in progress_entries],
         message="Progress entries retrieved successfully",
+    )
+
+
+@router.post(
+    "/{goal_id}/milestones",
+    response_model=APIResponse[GoalMilestoneResponse],
+    status_code=status.HTTP_201_CREATED,
+)
+async def create_milestone(
+    goal_id: UUID,
+    milestone_data: GoalMilestoneCreate,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Create a milestone for a life goal.
+
+    - **title**: Milestone title (required)
+    - **description**: Optional description
+    - **order_index**: Order in the milestone sequence
+    - **target_date**: Optional target completion date
+    """
+    service = GoalService(db)
+    milestone = await service.create_milestone(goal_id, current_user.id, milestone_data)
+
+    return APIResponse(
+        data=GoalMilestoneResponse.model_validate(milestone),
+        message="Milestone created successfully",
+    )
+
+
+@router.get(
+    "/{goal_id}/milestones", response_model=APIResponse[list[GoalMilestoneResponse]]
+)
+async def get_goal_milestones(
+    goal_id: UUID,
+    page: int = Query(1, ge=1),
+    limit: int = Query(20, ge=1, le=100),
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Get milestones for a goal."""
+    service = GoalService(db)
+    skip = (page - 1) * limit
+    milestones = await service.get_goal_milestones(
+        goal_id, current_user.id, skip, limit
+    )
+
+    return APIResponse(
+        data=[GoalMilestoneResponse.model_validate(m) for m in milestones],
+        message="Milestones retrieved successfully",
+    )
+
+
+@router.put(
+    "/{goal_id}/milestones/{milestone_id}",
+    response_model=APIResponse[GoalMilestoneResponse],
+)
+async def update_milestone(
+    goal_id: UUID,
+    milestone_id: UUID,
+    milestone_data: GoalMilestoneUpdate,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """
+    Update a milestone.
+
+    All fields are optional. Only provided fields will be updated.
+    """
+    service = GoalService(db)
+    milestone = await service.update_milestone(
+        milestone_id, goal_id, current_user.id, milestone_data
+    )
+
+    return APIResponse(
+        data=GoalMilestoneResponse.model_validate(milestone),
+        message="Milestone updated successfully",
+    )
+
+
+@router.delete(
+    "/{goal_id}/milestones/{milestone_id}",
+    response_model=APIResponse[dict],
+    status_code=status.HTTP_200_OK,
+)
+async def delete_milestone(
+    goal_id: UUID,
+    milestone_id: UUID,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Delete a milestone."""
+    service = GoalService(db)
+    deleted = await service.delete_milestone(milestone_id, goal_id, current_user.id)
+
+    return APIResponse(
+        data={"deleted": deleted}, message="Milestone deleted successfully"
     )
