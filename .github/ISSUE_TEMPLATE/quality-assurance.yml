@@ -1,0 +1,86 @@
+name: Quality Assurance Task
+description: Issue template for QA agent to handle testing and quality assurance tasks
+title: "[QA] "
+labels: ["agent:qa", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Quality Assurance Task
+        Use this template for tasks that require QA expertise, including test planning, test case creation, bug verification, and quality assurance processes.
+
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What needs to be tested or verified?
+      placeholder: Describe the testing scope or quality assurance task
+    validations:
+      required: true
+
+  - type: dropdown
+    id: test-type
+    attributes:
+      label: Test Type
+      description: What type of testing is required?
+      options:
+        - Functional Testing
+        - Integration Testing
+        - Regression Testing
+        - Performance Testing
+        - Security Testing
+        - Accessibility Testing
+        - User Acceptance Testing
+        - Exploratory Testing
+    validations:
+      required: true
+
+  - type: textarea
+    id: test-scope
+    attributes:
+      label: Test Scope
+      description: What areas need to be covered?
+      placeholder: |
+        Include:
+        - Features to test
+        - User flows to verify
+        - Edge cases to consider
+        - Environments to test (dev, staging, production)
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How will we know testing is complete?
+      placeholder: |
+        - [ ] Test plan created
+        - [ ] Test cases documented
+        - [ ] Tests executed
+        - [ ] Bugs reported and tracked
+        - [ ] Sign-off provided
+
+  - type: textarea
+    id: related-issues
+    attributes:
+      label: Related Issues
+      description: Link to feature issues or bugs being tested
+      placeholder: List issue numbers or links to features under test
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: What is the priority level?
+      options:
+        - P0 - Critical
+        - P1 - High
+        - P2 - Medium
+        - P3 - Low
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: Additional Notes
+      description: Test data requirements, environment setup, etc.

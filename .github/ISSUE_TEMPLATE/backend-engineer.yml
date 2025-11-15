@@ -1,0 +1,70 @@
+name: Backend Engineer Task
+description: Issue template for Backend Engineer agent to handle server-side development tasks
+title: "[BE] "
+labels: ["agent:backend", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Backend Engineer Task
+        Use this template for tasks that require backend development expertise, including API development, database design, business logic, and system integration.
+
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What needs to be built or fixed?
+      placeholder: Describe the backend feature, API endpoint, or bug fix
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical-details
+    attributes:
+      label: Technical Details
+      description: Provide technical specifications
+      placeholder: |
+        Include:
+        - API endpoints and methods
+        - Request/response schemas
+        - Database schema changes
+        - Business logic requirements
+        - Authentication/authorization needs
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How will we verify this is complete?
+      placeholder: |
+        - [ ] API endpoints implemented and documented
+        - [ ] Database migrations created
+        - [ ] Unit tests written and passing
+        - [ ] Integration tests passing
+        - [ ] API documentation updated
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: What services, databases, or other work is needed?
+      placeholder: List external services, database requirements, or related issues
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: What is the priority level?
+      options:
+        - P0 - Critical
+        - P1 - High
+        - P2 - Medium
+        - P3 - Low
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: Additional Notes
+      description: Performance considerations, scalability requirements, security concerns, etc.

@@ -1,0 +1,70 @@
+name: Frontend Engineer Task
+description: Issue template for Frontend Engineer agent to handle UI/UX implementation tasks
+title: "[FE] "
+labels: ["agent:frontend", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Frontend Engineer Task
+        Use this template for tasks that require frontend development expertise, including UI implementation, component creation, state management, and user experience enhancements.
+
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What needs to be built or fixed?
+      placeholder: Describe the frontend feature or bug fix
+    validations:
+      required: true
+
+  - type: textarea
+    id: technical-details
+    attributes:
+      label: Technical Details
+      description: Provide technical specifications
+      placeholder: Include component structure, styling requirements, state management needs, API integration details
+
+  - type: textarea
+    id: design-specs
+    attributes:
+      label: Design Specifications
+      description: Link to designs or describe visual requirements
+      placeholder: Provide Figma links, screenshots, or detailed visual specifications
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How will we verify this is complete?
+      placeholder: |
+        - [ ] Component renders correctly
+        - [ ] Responsive on mobile/tablet/desktop
+        - [ ] Accessibility requirements met
+        - [ ] Tests written and passing
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: What APIs, components, or other work is needed?
+      placeholder: List backend endpoints, reusable components, or related issues
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: What is the priority level?
+      options:
+        - P0 - Critical
+        - P1 - High
+        - P2 - Medium
+        - P3 - Low
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: Additional Notes
+      description: Browser compatibility, performance considerations, etc.

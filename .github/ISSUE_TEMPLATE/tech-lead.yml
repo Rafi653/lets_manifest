@@ -1,0 +1,98 @@
+name: Tech Lead Task
+description: Issue template for Tech Lead agent to handle architecture, coordination, and technical leadership tasks
+title: "[LEAD] "
+labels: ["agent:tech-lead", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Tech Lead Task
+        Use this template for tasks that require technical leadership, including architecture decisions, technical roadmap planning, team coordination, and cross-functional technical initiatives.
+
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What technical initiative or coordination is needed?
+      placeholder: Describe the technical leadership task or architectural decision
+    validations:
+      required: true
+
+  - type: dropdown
+    id: task-category
+    attributes:
+      label: Task Category
+      description: What type of leadership task is this?
+      options:
+        - Architecture & Design
+        - Technical Roadmap
+        - Team Coordination
+        - Code Review & Quality
+        - Performance & Scalability
+        - Security & Compliance
+        - DevOps & Infrastructure
+        - Technical Debt
+        - Knowledge Sharing
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Provide background and rationale
+      placeholder: |
+        Include:
+        - Current state and pain points
+        - Business or technical drivers
+        - Stakeholders involved
+        - Timeline considerations
+
+  - type: textarea
+    id: technical-details
+    attributes:
+      label: Technical Details
+      description: Describe the technical aspects
+      placeholder: |
+        Include:
+        - Proposed solutions or approaches
+        - Trade-offs and considerations
+        - Impact on existing systems
+        - Required resources
+
+  - type: textarea
+    id: acceptance-criteria
+    attributes:
+      label: Acceptance Criteria
+      description: How will we know this is complete?
+      placeholder: |
+        - [ ] Architecture decision documented
+        - [ ] Team alignment achieved
+        - [ ] Implementation plan created
+        - [ ] Technical documentation updated
+
+  - type: textarea
+    id: cross-functional-impact
+    attributes:
+      label: Cross-Functional Impact
+      description: What teams or systems are affected?
+      placeholder: List affected teams (FE, BE, QA, PM) and related issues
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: What is the priority level?
+      options:
+        - P0 - Critical
+        - P1 - High
+        - P2 - Medium
+        - P3 - Low
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: Additional Notes
+      description: References, research, alternatives considered, etc.

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://github.com/Rafi653/lets_manifest/blob/main/AGENTS.md
+    about: Learn about the Copilot Agent System and how to use it
+  - name: Roadmap
+    url: https://github.com/Rafi653/lets_manifest/blob/main/ROADMAP.md
+    about: View the project roadmap and task distribution plan

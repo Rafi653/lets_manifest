@@ -1,0 +1,59 @@
+name: Product Manager Task
+description: Issue template for Product Manager agent to handle product-related tasks
+title: "[PM] "
+labels: ["agent:pm", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Product Manager Task
+        Use this template for tasks that require product management expertise, including feature planning, requirements gathering, user stories, and prioritization.
+
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What is the goal of this task?
+      placeholder: Describe the product objective or feature requirement
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Provide background information
+      placeholder: Include market research, user feedback, business goals, or related features
+
+  - type: textarea
+    id: success-criteria
+    attributes:
+      label: Success Criteria
+      description: How will we know this task is complete?
+      placeholder: Define measurable outcomes or acceptance criteria
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies
+      description: Are there any dependencies on other tasks or teams?
+      placeholder: List related issues, blocked tasks, or required resources
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: What is the priority level?
+      options:
+        - P0 - Critical
+        - P1 - High
+        - P2 - Medium
+        - P3 - Low
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: Additional Notes
+      description: Any other information relevant to this task
