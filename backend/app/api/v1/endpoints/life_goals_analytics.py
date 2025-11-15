@@ -24,7 +24,7 @@ async def get_life_goals_summary(
 ):
     """
     Get summary statistics for user's life goals.
-    
+
     Returns:
     - Total number of life goals
     - Active, completed, and cancelled goals count
@@ -34,10 +34,9 @@ async def get_life_goals_summary(
     """
     service = LifeGoalAnalyticsService(db)
     summary = await service.get_life_goals_summary(current_user.id)
-    
+
     return APIResponse(
-        data=summary,
-        message="Life goals summary retrieved successfully"
+        data=summary, message="Life goals summary retrieved successfully"
     )
 
 
@@ -49,10 +48,10 @@ async def get_milestone_statistics(
 ):
     """
     Get milestone statistics.
-    
+
     If goal_id is provided, returns statistics for that specific goal.
     Otherwise, returns statistics across all user's life goals.
-    
+
     Returns:
     - Total milestones
     - Completed, in progress, and pending counts
@@ -60,10 +59,9 @@ async def get_milestone_statistics(
     """
     service = LifeGoalAnalyticsService(db)
     stats = await service.get_milestone_statistics(current_user.id, goal_id)
-    
+
     return APIResponse(
-        data=stats,
-        message="Milestone statistics retrieved successfully"
+        data=stats, message="Milestone statistics retrieved successfully"
     )
 
 
@@ -74,7 +72,7 @@ async def get_goals_by_life_area(
 ):
     """
     Get life goals grouped by life area/category.
-    
+
     Returns goals organized by categories such as:
     - investment
     - travel
@@ -87,8 +85,7 @@ async def get_goals_by_life_area(
     """
     service = LifeGoalAnalyticsService(db)
     goals_by_area = await service.get_goals_by_life_area(current_user.id)
-    
+
     return APIResponse(
-        data=goals_by_area,
-        message="Goals by life area retrieved successfully"
+        data=goals_by_area, message="Goals by life area retrieved successfully"
     )

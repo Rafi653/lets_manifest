@@ -120,11 +120,10 @@ class GoalMilestoneRepository(BaseRepository[GoalMilestone]):
     async def count_completed_milestones(self, goal_id: UUID) -> int:
         """Count completed milestones for a goal."""
         result = await self.db.execute(
-            select(GoalMilestone)
-            .where(
+            select(GoalMilestone).where(
                 and_(
                     GoalMilestone.goal_id == goal_id,
-                    GoalMilestone.status == "completed"
+                    GoalMilestone.status == "completed",
                 )
             )
         )

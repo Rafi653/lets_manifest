@@ -10,8 +10,18 @@ from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.goal import Goal, GoalProgress, GoalMilestone
-from app.repositories.goal_repository import GoalRepository, GoalProgressRepository, GoalMilestoneRepository
-from app.schemas.goal import GoalCreate, GoalUpdate, GoalProgressCreate, GoalMilestoneCreate, GoalMilestoneUpdate
+from app.repositories.goal_repository import (
+    GoalRepository,
+    GoalProgressRepository,
+    GoalMilestoneRepository,
+)
+from app.schemas.goal import (
+    GoalCreate,
+    GoalUpdate,
+    GoalProgressCreate,
+    GoalMilestoneCreate,
+    GoalMilestoneUpdate,
+)
 
 
 class GoalService:
@@ -81,7 +91,11 @@ class GoalService:
         updated_goal = await self.repository.update(goal, update_data)
 
         # Update or create reminder if reminder settings changed
-        if "reminder_enabled" in update_data or "reminder_time" in update_data or "reminder_days_before" in update_data:
+        if (
+            "reminder_enabled" in update_data
+            or "reminder_time" in update_data
+            or "reminder_days_before" in update_data
+        ):
             from app.services.notification_service import NotificationService
 
             notification_service = NotificationService(self.db)
@@ -135,18 +149,15 @@ class GoalService:
     ) -> GoalMilestone:
         """Create a milestone for a goal."""
         goal = await self.get_goal(goal_id, user_id)
-        
+
         # Ensure it's a life goal
         if goal.goal_type != "life_goal":
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Milestones can only be added to life goals"
+                detail="Milestones can only be added to life goals",
             )
-        
-        milestone = GoalMilestone(
-            goal_id=goal_id,
-            **milestone_data.model_dump()
-        )
+
+        milestone = GoalMilestone(goal_id=goal_id, **milestone_data.model_dump())
         return await self.milestone_repository.create(milestone)
 
     async def get_goal_milestones(
@@ -157,24 +168,27 @@ class GoalService:
         return await self.milestone_repository.get_goal_milestones(goal_id, skip, limit)
 
     async def update_milestone(
-        self, milestone_id: UUID, goal_id: UUID, user_id: UUID, milestone_data: GoalMilestoneUpdate
+        self,
+        milestone_id: UUID,
+        goal_id: UUID,
+        user_id: UUID,
+        milestone_data: GoalMilestoneUpdate,
     ) -> GoalMilestone:
         """Update a milestone."""
         await self.get_goal(goal_id, user_id)
-        
+
         milestone = await self.milestone_repository.get_by_id(milestone_id)
         if not milestone or milestone.goal_id != goal_id:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Milestone not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="Milestone not found"
             )
-        
+
         update_data = milestone_data.model_dump(exclude_unset=True)
-        
+
         # Auto-set completed_at if status is completed
         if update_data.get("status") == "completed" and not milestone.completed_at:
             update_data["completed_at"] = datetime.utcnow()
-        
+
         return await self.milestone_repository.update(milestone, update_data)
 
     async def delete_milestone(
@@ -182,12 +196,11 @@ class GoalService:
     ) -> bool:
         """Delete a milestone."""
         await self.get_goal(goal_id, user_id)
-        
+
         milestone = await self.milestone_repository.get_by_id(milestone_id)
         if not milestone or milestone.goal_id != goal_id:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="Milestone not found"
+                status_code=status.HTTP_404_NOT_FOUND, detail="Milestone not found"
             )
-        
+
         return await self.milestone_repository.delete(milestone_id)

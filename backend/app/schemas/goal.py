@@ -47,7 +47,9 @@ class GoalUpdate(BaseModel):
     target_value: Optional[Decimal] = None
     target_unit: Optional[str] = Field(None, max_length=50)
     end_date: Optional[date] = None
-    status: Optional[str] = Field(None, pattern="^(active|completed|cancelled|paused|in_progress)$")
+    status: Optional[str] = Field(
+        None, pattern="^(active|completed|cancelled|paused|in_progress)$"
+    )
     priority: Optional[int] = Field(None, ge=0, le=5)
     current_value: Optional[Decimal] = None
     reminder_enabled: Optional[bool] = None
@@ -119,7 +121,9 @@ class GoalMilestoneUpdate(BaseModel):
     title: Optional[str] = Field(None, max_length=255)
     description: Optional[str] = None
     order_index: Optional[int] = Field(None, ge=0)
-    status: Optional[str] = Field(None, pattern="^(pending|in_progress|completed|skipped)$")
+    status: Optional[str] = Field(
+        None, pattern="^(pending|in_progress|completed|skipped)$"
+    )
     target_date: Optional[date] = None
 
 

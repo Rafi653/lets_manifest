@@ -68,7 +68,8 @@ class Goal(Base):
     # Constraints
     __table_args__ = (
         CheckConstraint(
-            "goal_type IN ('daily', 'weekly', 'monthly', 'yearly', 'life_goal')", name="ck_goal_type"
+            "goal_type IN ('daily', 'weekly', 'monthly', 'yearly', 'life_goal')",
+            name="ck_goal_type",
         ),
         CheckConstraint(
             "status IN ('active', 'completed', 'cancelled', 'paused', 'in_progress')",
@@ -149,4 +150,6 @@ class GoalMilestone(Base):
     goal = relationship("Goal", back_populates="milestones")
 
     def __repr__(self) -> str:
-        return f"<GoalMilestone(id={self.id}, goal_id={self.goal_id}, title={self.title})>"
+        return (
+            f"<GoalMilestone(id={self.id}, goal_id={self.goal_id}, title={self.title})>"
+        )
