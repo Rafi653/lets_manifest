@@ -2,8 +2,9 @@
  * Goal-related TypeScript types matching the backend API schemas
  */
 
-export type GoalType = 'daily' | 'weekly' | 'monthly' | 'yearly';
-export type GoalStatus = 'active' | 'completed' | 'cancelled' | 'paused';
+export type GoalType = 'daily' | 'weekly' | 'monthly' | 'yearly' | 'life_goal';
+export type GoalStatus = 'active' | 'completed' | 'cancelled' | 'paused' | 'in_progress';
+export type MilestoneStatus = 'pending' | 'in_progress' | 'completed' | 'skipped';
 
 export interface Goal {
   id: string;
@@ -15,8 +16,8 @@ export interface Goal {
   target_value: number | null;
   target_unit: string | null;
   current_value: number;
-  start_date: string; // ISO date string
-  end_date: string; // ISO date string
+  start_date: string | null; // ISO date string (nullable for life goals)
+  end_date: string | null; // ISO date string (nullable for life goals)
   priority: number; // 0-5
   status: GoalStatus;
   is_recurring: boolean;
@@ -37,8 +38,8 @@ export interface GoalCreate {
   category?: string | null;
   target_value?: number | null;
   target_unit?: string | null;
-  start_date: string; // ISO date string
-  end_date: string; // ISO date string
+  start_date?: string | null; // ISO date string (nullable for life goals)
+  end_date?: string | null; // ISO date string (nullable for life goals)
   priority?: number; // 0-5
   is_recurring?: boolean;
   recurrence_pattern?: string | null;
@@ -86,3 +87,84 @@ export interface PaginatedGoals {
   limit: number;
   total_pages: number;
 }
+
+// Life goal milestone types
+export interface GoalMilestone {
+  id: string;
+  goal_id: string;
+  title: string;
+  description: string | null;
+  order_index: number;
+  status: MilestoneStatus;
+  target_date: string | null; // ISO date string
+  created_at: string; // ISO datetime string
+  completed_at: string | null;
+}
+
+export interface GoalMilestoneCreate {
+  title: string;
+  description?: string | null;
+  order_index?: number;
+  target_date?: string | null; // ISO date string
+}
+
+export interface GoalMilestoneUpdate {
+  title?: string;
+  description?: string | null;
+  order_index?: number;
+  status?: MilestoneStatus;
+  target_date?: string | null; // ISO date string
+}
+
+// Life goal analytics types
+export interface LifeGoalSummary {
+  total_goals: number;
+  active_goals: number;
+  completed_goals: number;
+  cancelled_goals: number;
+  completion_rate: number;
+  goals_by_category: Record<string, number>;
+  avg_days_to_complete: number | null;
+}
+
+export interface MilestoneStatistics {
+  total_milestones: number;
+  completed_milestones: number;
+  in_progress_milestones: number;
+  pending_milestones: number;
+  skipped_milestones: number;
+  completion_rate: number;
+}
+
+export interface GoalsByLifeArea {
+  life_area: string;
+  goal_count: number;
+  goals: Array<{
+    id: string;
+    title: string;
+    status: GoalStatus;
+    priority: number;
+    created_at: string | null;
+    completed_at: string | null;
+  }>;
+}
+
+// Life area categories
+export const LIFE_AREAS = [
+  'investment',
+  'travel',
+  'health',
+  'career',
+  'education',
+  'relationships',
+  'personal_growth',
+  'paperwork',
+  'home',
+  'financial',
+  'creative',
+  'social',
+  'spiritual',
+  'other'
+] as const;
+
+export type LifeArea = typeof LIFE_AREAS[number];
