@@ -92,12 +92,13 @@ const FoodForm: React.FC<FoodFormProps> = ({ food, onSubmit, onCancel }) => {
           value={formData.meal_type}
           onChange={handleChange}
           required
-        >
-          <option value="breakfast">Breakfast</option>
-          <option value="lunch">Lunch</option>
-          <option value="dinner">Dinner</option>
-          <option value="snack">Snack</option>
-        </Select>
+          options={[
+            { value: 'breakfast', label: 'Breakfast' },
+            { value: 'lunch', label: 'Lunch' },
+            { value: 'dinner', label: 'Dinner' },
+            { value: 'snack', label: 'Snack' }
+          ]}
+        />
       </div>
 
       <div className="form-row">

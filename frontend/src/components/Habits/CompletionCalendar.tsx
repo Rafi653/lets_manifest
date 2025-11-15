@@ -3,7 +3,7 @@
  */
 
 import React from 'react';
-import { DailyCompletionData } from '../../types/habit';
+import type { DailyCompletionData } from '../../types/habit';
 import './CompletionCalendar.css';
 
 interface CompletionCalendarProps {

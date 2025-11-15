@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import type { Goal, GoalCreate, GoalUpdate, LifeArea } from '../../types/goal';
+import React, { useState } from 'react';
+import type { Goal, GoalCreate, GoalUpdate, GoalType, GoalStatus } from '../../types/goal';
 import { LIFE_AREAS } from '../../types/goal';
 import Button from '../common/Button';
 import Input from '../common/Input';
@@ -13,8 +13,21 @@ interface LifeGoalFormProps {
   onCancel: () => void;
 }
 
+interface FormState {
+  title: string;
+  description: string | null;
+  goal_type: GoalType;
+  category: string | null;
+  priority: number;
+  status?: GoalStatus;
+  target_value: number | null;
+  target_unit: string | null;
+  start_date: string | null;
+  end_date: string | null;
+}
+
 const LifeGoalForm: React.FC<LifeGoalFormProps> = ({ goal, onSubmit, onCancel }) => {
-  const [formData, setFormData] = useState<GoalCreate | GoalUpdate>({
+  const [formData, setFormData] = useState<FormState>({
     title: goal?.title || '',
     description: goal?.description || '',
     goal_type: 'life_goal',
@@ -46,7 +59,34 @@ const LifeGoalForm: React.FC<LifeGoalFormProps> = ({ goal, onSubmit, onCancel })
     try {
       setSubmitting(true);
       setError(null);
-      await onSubmit(formData);
+      
+      // Transform form data to the correct type based on whether we're editing or creating
+      const submitData: GoalCreate | GoalUpdate = goal
+        ? {
+            // Update mode - only include fields that can be updated
+            title: formData.title,
+            description: formData.description,
+            category: formData.category,
+            priority: formData.priority,
+            status: formData.status,
+            target_value: formData.target_value,
+            target_unit: formData.target_unit,
+            end_date: formData.end_date || undefined,
+          }
+        : {
+            // Create mode - include all create fields
+            title: formData.title,
+            description: formData.description,
+            goal_type: formData.goal_type,
+            category: formData.category,
+            priority: formData.priority,
+            target_value: formData.target_value,
+            target_unit: formData.target_unit,
+            start_date: formData.start_date,
+            end_date: formData.end_date,
+          };
+      
+      await onSubmit(submitData);
     } catch (err) {
       console.error('Failed to submit form:', err);
       setError('Failed to save life goal. Please try again.');
@@ -95,14 +135,11 @@ const LifeGoalForm: React.FC<LifeGoalFormProps> = ({ goal, onSubmit, onCancel })
             value={formData.category || ''}
             onChange={handleChange}
             required
-          >
-            <option value="">Select a life area...</option>
-            {LIFE_AREAS.map(area => (
-              <option key={area} value={area}>
-                {area.charAt(0).toUpperCase() + area.slice(1).replace('_', ' ')}
-              </option>
-            ))}
-          </Select>
+            options={LIFE_AREAS.map(area => ({
+              value: area,
+              label: area.charAt(0).toUpperCase() + area.slice(1).replace('_', ' ')
+            }))}
+          />
         </div>
 
         <div className="form-group">
@@ -111,13 +148,14 @@ const LifeGoalForm: React.FC<LifeGoalFormProps> = ({ goal, onSubmit, onCancel })
             name="priority"
             value={formData.priority?.toString() || '3'}
             onChange={handleChange}
-          >
-            <option value="1">Low (1)</option>
-            <option value="2">Medium-Low (2)</option>
-            <option value="3">Medium (3)</option>
-            <option value="4">Medium-High (4)</option>
-            <option value="5">High (5)</option>
-          </Select>
+            options={[
+              { value: '1', label: 'Low (1)' },
+              { value: '2', label: 'Medium-Low (2)' },
+              { value: '3', label: 'Medium (3)' },
+              { value: '4', label: 'Medium-High (4)' },
+              { value: '5', label: 'High (5)' }
+            ]}
+          />
         </div>
 
         {goal && (
@@ -127,13 +165,14 @@ const LifeGoalForm: React.FC<LifeGoalFormProps> = ({ goal, onSubmit, onCancel })
               name="status"
               value={formData.status || 'active'}
               onChange={handleChange}
-            >
-              <option value="active">Active</option>
-              <option value="in_progress">In Progress</option>
-              <option value="completed">Completed</option>
-              <option value="paused">Paused</option>
-              <option value="cancelled">Cancelled</option>
-            </Select>
+              options={[
+                { value: 'active', label: 'Active' },
+                { value: 'in_progress', label: 'In Progress' },
+                { value: 'completed', label: 'Completed' },
+                { value: 'paused', label: 'Paused' },
+                { value: 'cancelled', label: 'Cancelled' }
+              ]}
+            />
           </div>
         )}
       </div>

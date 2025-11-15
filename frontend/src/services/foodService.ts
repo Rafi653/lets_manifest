@@ -3,12 +3,12 @@
  */
 
 import { apiClient } from '../api/client';
-import {
+import type {
   Food,
   CreateFoodRequest,
   UpdateFoodRequest,
 } from '../types/food';
-import { APIResponse, PaginatedResponse } from '../types/api';
+import type { APIResponse, PaginatedResponse } from '../types/api';
 
 /**
  * Food CRUD operations

@@ -3,15 +3,15 @@
  */
 
 import React from 'react';
-import { CompletionStats } from '../../types/habit';
+import type { CompletionStats as CompletionStatsType } from '../../types/habit';
 import './CompletionStats.css';
 
 interface CompletionStatsProps {
-  stats: CompletionStats;
+  stats: CompletionStatsType;
   confidenceLevel: number;
 }
 
-const CompletionStats: React.FC<CompletionStatsProps> = ({ stats, confidenceLevel }) => {
+const CompletionStatsComponent: React.FC<CompletionStatsProps> = ({ stats, confidenceLevel }) => {
   const getConfidenceColor = (level: number): string => {
     if (level >= 80) return '#10b981';
     if (level >= 60) return '#f59e0b';
@@ -97,4 +97,4 @@ const CompletionStats: React.FC<CompletionStatsProps> = ({ stats, confidenceLeve
   );
 };
 
-export default CompletionStats;
+export default CompletionStatsComponent;

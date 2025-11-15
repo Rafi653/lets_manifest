@@ -143,13 +143,13 @@ const LifeGoalList: React.FC<LifeGoalListProps> = ({ goals, onEdit, onDelete, lo
                 )}
 
                 <div className="goal-actions">
-                  <Button onClick={() => handleToggleExpand(goal.id)} variant="secondary" size="small">
+                  <Button onClick={() => handleToggleExpand(goal.id)} variant="secondary">
                     {expandedGoalId === goal.id ? 'Hide' : 'Show'} Milestones
                   </Button>
-                  <Button onClick={() => onEdit(goal)} variant="secondary" size="small">
+                  <Button onClick={() => onEdit(goal)} variant="secondary">
                     Edit
                   </Button>
-                  <Button onClick={() => onDelete(goal.id)} variant="danger" size="small">
+                  <Button onClick={() => onDelete(goal.id)} variant="danger">
                     Delete
                   </Button>
                 </div>

@@ -3,12 +3,12 @@
  */
 
 import { apiClient } from '../api/client';
-import {
+import type {
   Workout,
   CreateWorkoutRequest,
   UpdateWorkoutRequest,
 } from '../types/workout';
-import { APIResponse, PaginatedResponse } from '../types/api';
+import type { APIResponse, PaginatedResponse } from '../types/api';
 
 /**
  * Workout CRUD operations

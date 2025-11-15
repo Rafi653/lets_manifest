@@ -160,12 +160,12 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ workout, onSubmit, onCancel }
             name="intensity"
             value={formData.intensity || ''}
             onChange={handleChange}
-          >
-            <option value="">Select intensity</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </Select>
+            options={[
+              { value: 'low', label: 'Low' },
+              { value: 'medium', label: 'Medium' },
+              { value: 'high', label: 'High' }
+            ]}
+          />
         </div>
 
         <div className="form-row">
@@ -236,7 +236,6 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ workout, onSubmit, onCancel }
                   <Button
                     type="button"
                     variant="danger"
-                    size="small"
                     onClick={() => removeExercise(index)}
                   >
                     Remove
@@ -292,10 +291,11 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ workout, onSubmit, onCancel }
                     label="Weight Unit"
                     value={exercise.weight_unit}
                     onChange={(e) => updateExercise(index, 'weight_unit', e.target.value)}
-                  >
-                    <option value="lbs">lbs</option>
-                    <option value="kg">kg</option>
-                  </Select>
+                    options={[
+                      { value: 'lbs', label: 'lbs' },
+                      { value: 'kg', label: 'kg' }
+                    ]}
+                  />
                 </div>
 
                 <div className="form-row">
@@ -312,12 +312,12 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ workout, onSubmit, onCancel }
                     label="Distance Unit"
                     value={exercise.distance_unit || ''}
                     onChange={(e) => updateExercise(index, 'distance_unit', e.target.value)}
-                  >
-                    <option value="">Select unit</option>
-                    <option value="miles">Miles</option>
-                    <option value="km">Kilometers</option>
-                    <option value="meters">Meters</option>
-                  </Select>
+                    options={[
+                      { value: 'miles', label: 'Miles' },
+                      { value: 'km', label: 'Kilometers' },
+                      { value: 'meters', label: 'Meters' }
+                    ]}
+                  />
 
                   <Input
                     label="Duration (seconds)"

@@ -83,7 +83,7 @@ const MilestoneList: React.FC<MilestoneListProps> = ({
     <div className="milestone-list">
       <div className="milestone-header">
         <h4>Milestones ({milestones.length})</h4>
-        <Button onClick={() => setShowForm(!showForm)} variant="secondary" size="small">
+        <Button onClick={() => setShowForm(!showForm)} variant="secondary">
           {showForm ? 'Cancel' : '+ Add Milestone'}
         </Button>
       </div>
@@ -107,7 +107,7 @@ const MilestoneList: React.FC<MilestoneListProps> = ({
             }
             placeholder="Additional details..."
           />
-          <Button type="submit" variant="primary" size="small">
+          <Button type="submit" variant="primary">
             Add Milestone
           </Button>
         </form>
