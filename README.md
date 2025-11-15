@@ -31,8 +31,10 @@ When creating a new issue, use the appropriate agent template:
 
 ### Documentation
 
+- **[SETUP_SUMMARY.md](./SETUP_SUMMARY.md)** - Overview of what was created and how to get started
 - **[AGENTS.md](./AGENTS.md)** - Detailed information about each agent role, responsibilities, and workflows
 - **[ROADMAP.md](./ROADMAP.md)** - Task distribution plan, phased approach, and coordination guidelines
+- **[ISSUE_MANAGEMENT.md](./ISSUE_MANAGEMENT.md)** - Process for assigning, tracking, and closing issues
 
 ## Workflow
 
