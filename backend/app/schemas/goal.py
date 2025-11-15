@@ -25,6 +25,11 @@ class GoalBase(BaseModel):
     is_recurring: bool = False
     recurrence_pattern: Optional[str] = Field(None, max_length=50)
     parent_goal_id: Optional[UUID] = None
+    reminder_enabled: bool = False
+    reminder_time: Optional[str] = Field(
+        None, pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]$"
+    )
+    reminder_days_before: Optional[int] = Field(None, ge=0)
 
 
 class GoalCreate(GoalBase):
@@ -45,6 +50,11 @@ class GoalUpdate(BaseModel):
     status: Optional[str] = Field(None, pattern="^(active|completed|cancelled|paused)$")
     priority: Optional[int] = Field(None, ge=0, le=5)
     current_value: Optional[Decimal] = None
+    reminder_enabled: Optional[bool] = None
+    reminder_time: Optional[str] = Field(
+        None, pattern="^([0-1][0-9]|2[0-3]):[0-5][0-9]$"
+    )
+    reminder_days_before: Optional[int] = Field(None, ge=0)
 
 
 class GoalResponse(GoalBase):

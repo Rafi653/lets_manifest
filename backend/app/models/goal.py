@@ -56,6 +56,11 @@ class Goal(Base):
     is_recurring = Column(Boolean, default=False)
     recurrence_pattern = Column(String(50))
 
+    # Reminder settings
+    reminder_enabled = Column(Boolean, default=False)
+    reminder_time = Column(String(5))  # HH:MM format
+    reminder_days_before = Column(Integer)  # Days before deadline to remind
+
     # Timestamps
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     completed_at = Column(DateTime)
@@ -78,6 +83,9 @@ class Goal(Base):
         "GoalProgress", back_populates="goal", cascade="all, delete-orphan"
     )
     parent_goal = relationship("Goal", remote_side="Goal.id", backref="sub_goals")
+    notifications = relationship(
+        "Notification", back_populates="goal", cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return f"<Goal(id={self.id}, title={self.title}, type={self.goal_type})>"

@@ -22,6 +22,9 @@ export interface Goal {
   is_recurring: boolean;
   recurrence_pattern: string | null;
   parent_goal_id: string | null;
+  reminder_enabled: boolean;
+  reminder_time: string | null; // HH:MM format
+  reminder_days_before: number | null;
   created_at: string; // ISO datetime string
   updated_at: string | null;
   completed_at: string | null;
@@ -40,6 +43,9 @@ export interface GoalCreate {
   is_recurring?: boolean;
   recurrence_pattern?: string | null;
   parent_goal_id?: string | null;
+  reminder_enabled?: boolean;
+  reminder_time?: string | null; // HH:MM format
+  reminder_days_before?: number | null;
 }
 
 export interface GoalUpdate {
@@ -52,6 +58,9 @@ export interface GoalUpdate {
   status?: GoalStatus;
   priority?: number;
   current_value?: number;
+  reminder_enabled?: boolean;
+  reminder_time?: string | null; // HH:MM format
+  reminder_days_before?: number | null;
 }
 
 export interface GoalProgress {
