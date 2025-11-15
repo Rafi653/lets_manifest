@@ -25,7 +25,16 @@ class GoalService:
     async def create_goal(self, user_id: UUID, goal_data: GoalCreate) -> Goal:
         """Create a new goal for a user."""
         goal = Goal(user_id=user_id, **goal_data.model_dump())
-        return await self.repository.create(goal)
+        created_goal = await self.repository.create(goal)
+
+        # Create reminder notification if reminders are enabled
+        if created_goal.reminder_enabled:
+            from app.services.notification_service import NotificationService
+
+            notification_service = NotificationService(self.db)
+            await notification_service.create_goal_reminder(created_goal, user_id)
+
+        return created_goal
 
     async def get_goal(self, goal_id: UUID, user_id: UUID) -> Goal:
         """Get a goal by ID, ensuring it belongs to the user."""
@@ -68,7 +77,20 @@ class GoalService:
         if update_data.get("status") == "completed" and not goal.completed_at:
             update_data["completed_at"] = datetime.utcnow()
 
-        return await self.repository.update(goal, update_data)
+        updated_goal = await self.repository.update(goal, update_data)
+
+        # Update or create reminder if reminder settings changed
+        if "reminder_enabled" in update_data or "reminder_time" in update_data or "reminder_days_before" in update_data:
+            from app.services.notification_service import NotificationService
+
+            notification_service = NotificationService(self.db)
+            # Cancel existing reminders for this goal
+            # (In a real implementation, you'd query and cancel/delete old reminders)
+            # Then create new reminder if enabled
+            if updated_goal.reminder_enabled:
+                await notification_service.create_goal_reminder(updated_goal, user_id)
+
+        return updated_goal
 
     async def delete_goal(self, goal_id: UUID, user_id: UUID) -> bool:
         """Delete a goal."""

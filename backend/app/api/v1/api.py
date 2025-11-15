@@ -14,6 +14,7 @@ from app.api.v1.endpoints import (
     daily_reviews,
     blog_entries,
     progress,
+    notifications,
 )
 
 api_router = APIRouter()
@@ -37,4 +38,7 @@ api_router.include_router(
 )
 api_router.include_router(
     progress.router, prefix="/progress", tags=["Progress Tracking"]
+)
+api_router.include_router(
+    notifications.router, prefix="/notifications", tags=["Notifications"]
 )

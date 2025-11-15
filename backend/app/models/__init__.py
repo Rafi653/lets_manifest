@@ -9,6 +9,7 @@ from .food import Food
 from .goal import Goal, GoalProgress
 from .habit import Habit, HabitEntry
 from .media import Media
+from .notification import Notification, NotificationSettings
 from .progress_snapshot import ProgressSnapshot
 from .tag import Tag, Taggable
 from .user import User
@@ -30,4 +31,6 @@ __all__ = [
     "Taggable",
     "Media",
     "ProgressSnapshot",
+    "Notification",
+    "NotificationSettings",
 ]
