@@ -9,6 +9,7 @@ from app.api.v1.endpoints import (
     users,
     goals,
     habits,
+    habit_analytics,
     foods,
     workouts,
     daily_reviews,
@@ -28,6 +29,9 @@ api_router.include_router(users.router, prefix="/users", tags=["Users"])
 # Core module endpoints
 api_router.include_router(goals.router, prefix="/goals", tags=["Goals"])
 api_router.include_router(habits.router, prefix="/habits", tags=["Habits"])
+api_router.include_router(
+    habit_analytics.router, prefix="/habits", tags=["Habit Analytics"]
+)
 api_router.include_router(foods.router, prefix="/foods", tags=["Food Tracking"])
 api_router.include_router(workouts.router, prefix="/workouts", tags=["Workouts"])
 api_router.include_router(
