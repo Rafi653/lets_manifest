@@ -75,6 +75,8 @@ See the [detailed setup guide](docs/guides/setup.md) for manual installation wit
 - **[Frontend README](frontend/README.md)** - Frontend-specific documentation
 - **[Backend README](backend/README.md)** - Backend-specific documentation
 - **[Database README](database/README.md)** - Database schema and management
+- **[QA/Testing Plan](QA_TESTING_PLAN.md)** - Comprehensive testing strategy and QA documentation
+- **[QA Quick Start](docs/QA_QUICK_START.md)** - Quick reference guide for testing
 
 ## Project Structure
 
