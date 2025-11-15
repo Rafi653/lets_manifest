@@ -95,7 +95,9 @@ async def test_goal_with_progress(db_session: AsyncSession):
 
     # Re-query with eager loading to verify relationship
     result = await db_session.execute(
-        select(Goal).where(Goal.id == goal.id).options(selectinload(Goal.progress_entries))
+        select(Goal)
+        .where(Goal.id == goal.id)
+        .options(selectinload(Goal.progress_entries))
     )
     reloaded_goal = result.scalar_one()
     assert len(reloaded_goal.progress_entries) == 2
@@ -265,7 +267,7 @@ async def test_sub_goals(db_session: AsyncSession):
 
     # Verify relationship
     assert sub_goal.parent_goal_id == parent_goal.id
-    
+
     # Query sub-goals explicitly
     result = await db_session.execute(
         select(Goal).where(Goal.parent_goal_id == parent_goal.id)

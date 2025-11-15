@@ -6,14 +6,15 @@ import asyncio
 from typing import AsyncGenerator, Generator
 
 import pytest
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sessionmaker
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.core.config import settings
 from app.models.base import Base
 
-
 # Create test database engine
-TEST_DATABASE_URL = settings.DATABASE_URL.replace("lets_manifest_dev", "lets_manifest_test")
+TEST_DATABASE_URL = settings.DATABASE_URL.replace(
+    "lets_manifest_dev", "lets_manifest_test"
+)
 
 test_engine = create_async_engine(
     TEST_DATABASE_URL,

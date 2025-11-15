@@ -71,8 +71,9 @@ async def test_transaction_rollback(db_session: AsyncSession):
 @pytest.mark.asyncio
 async def test_transaction_commit(db_session_no_rollback: AsyncSession):
     """Test that transactions can be committed."""
-    from app.models.user import User
     from sqlalchemy import select
+
+    from app.models.user import User
 
     # Create a user
     user = User(
@@ -84,7 +85,9 @@ async def test_transaction_commit(db_session_no_rollback: AsyncSession):
     await db_session_no_rollback.commit()
 
     # Verify user was committed
-    result = await db_session_no_rollback.execute(select(User).where(User.email == "commit@example.com"))
+    result = await db_session_no_rollback.execute(
+        select(User).where(User.email == "commit@example.com")
+    )
     committed_user = result.scalar_one_or_none()
     assert committed_user is not None
     assert committed_user.email == "commit@example.com"

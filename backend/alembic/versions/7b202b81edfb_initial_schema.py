@@ -7,9 +7,9 @@ Create Date: 2025-11-15 03:25:16.804208
 """
 from typing import Sequence, Union
 
-from alembic import op
 import sqlalchemy as sa
 
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = "7b202b81edfb"
@@ -71,7 +71,9 @@ def upgrade() -> None:
         sa.Column("updated_at", sa.DateTime(), nullable=True),
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=False),
-        sa.CheckConstraint("status IN ('draft', 'published', 'archived')", name="ck_blog_status"),
+        sa.CheckConstraint(
+            "status IN ('draft', 'published', 'archived')", name="ck_blog_status"
+        ),
         sa.ForeignKeyConstraint(
             ["user_id"],
             ["users.id"],
@@ -79,7 +81,9 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(op.f("ix_blog_entries_slug"), "blog_entries", ["slug"], unique=True)
-    op.create_index(op.f("ix_blog_entries_user_id"), "blog_entries", ["user_id"], unique=False)
+    op.create_index(
+        op.f("ix_blog_entries_user_id"), "blog_entries", ["user_id"], unique=False
+    )
     op.create_table(
         "daily_reviews",
         sa.Column("user_id", sa.UUID(), nullable=False),
@@ -102,9 +106,12 @@ def upgrade() -> None:
         sa.CheckConstraint(
             "energy_level >= 1 AND energy_level <= 10", name="ck_review_energy_level"
         ),
-        sa.CheckConstraint("mood_rating >= 1 AND mood_rating <= 10", name="ck_review_mood_rating"),
         sa.CheckConstraint(
-            "productivity_rating >= 1 AND productivity_rating <= 10", name="ck_review_productivity"
+            "mood_rating >= 1 AND mood_rating <= 10", name="ck_review_mood_rating"
+        ),
+        sa.CheckConstraint(
+            "productivity_rating >= 1 AND productivity_rating <= 10",
+            name="ck_review_productivity",
         ),
         sa.CheckConstraint(
             "sleep_quality >= 1 AND sleep_quality <= 10", name="ck_review_sleep_quality"
@@ -116,7 +123,9 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("user_id", "review_date", name="uq_user_review_date"),
     )
-    op.create_index(op.f("ix_daily_reviews_user_id"), "daily_reviews", ["user_id"], unique=False)
+    op.create_index(
+        op.f("ix_daily_reviews_user_id"), "daily_reviews", ["user_id"], unique=False
+    )
     op.create_table(
         "foods",
         sa.Column("user_id", sa.UUID(), nullable=False),
@@ -138,7 +147,8 @@ def upgrade() -> None:
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.CheckConstraint(
-            "meal_type IN ('breakfast', 'lunch', 'dinner', 'snack')", name="ck_food_meal_type"
+            "meal_type IN ('breakfast', 'lunch', 'dinner', 'snack')",
+            name="ck_food_meal_type",
         ),
         sa.ForeignKeyConstraint(
             ["user_id"],
@@ -172,7 +182,8 @@ def upgrade() -> None:
             "goal_type IN ('daily', 'weekly', 'monthly', 'yearly')", name="ck_goal_type"
         ),
         sa.CheckConstraint(
-            "status IN ('active', 'completed', 'cancelled', 'paused')", name="ck_goal_status"
+            "status IN ('active', 'completed', 'cancelled', 'paused')",
+            name="ck_goal_status",
         ),
         sa.CheckConstraint("priority >= 0 AND priority <= 5", name="ck_goal_priority"),
         sa.ForeignKeyConstraint(
@@ -186,7 +197,9 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(op.f("ix_goals_goal_type"), "goals", ["goal_type"], unique=False)
-    op.create_index(op.f("ix_goals_parent_goal_id"), "goals", ["parent_goal_id"], unique=False)
+    op.create_index(
+        op.f("ix_goals_parent_goal_id"), "goals", ["parent_goal_id"], unique=False
+    )
     op.create_index(op.f("ix_goals_user_id"), "goals", ["user_id"], unique=False)
     op.create_table(
         "habits",
@@ -206,7 +219,9 @@ def upgrade() -> None:
         sa.Column("updated_at", sa.DateTime(), nullable=True),
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=False),
-        sa.CheckConstraint("frequency IN ('daily', 'weekly', 'custom')", name="ck_habit_frequency"),
+        sa.CheckConstraint(
+            "frequency IN ('daily', 'weekly', 'custom')", name="ck_habit_frequency"
+        ),
         sa.ForeignKeyConstraint(
             ["user_id"],
             ["users.id"],
@@ -246,31 +261,46 @@ def upgrade() -> None:
         sa.Column("total_goals", sa.Integer(), nullable=True),
         sa.Column("completed_goals", sa.Integer(), nullable=True),
         sa.Column("active_habits", sa.Integer(), nullable=True),
-        sa.Column("habit_completion_rate", sa.Numeric(precision=5, scale=2), nullable=True),
+        sa.Column(
+            "habit_completion_rate", sa.Numeric(precision=5, scale=2), nullable=True
+        ),
         sa.Column("total_workouts", sa.Integer(), nullable=True),
         sa.Column("total_workout_minutes", sa.Integer(), nullable=True),
-        sa.Column("average_daily_mood", sa.Numeric(precision=3, scale=1), nullable=True),
-        sa.Column("average_energy_level", sa.Numeric(precision=3, scale=1), nullable=True),
+        sa.Column(
+            "average_daily_mood", sa.Numeric(precision=3, scale=1), nullable=True
+        ),
+        sa.Column(
+            "average_energy_level", sa.Numeric(precision=3, scale=1), nullable=True
+        ),
         sa.Column("total_blog_entries", sa.Integer(), nullable=True),
         sa.Column("weight", sa.Numeric(precision=5, scale=2), nullable=True),
         sa.Column("weight_unit", sa.String(length=10), nullable=True),
-        sa.Column("body_fat_percentage", sa.Numeric(precision=4, scale=2), nullable=True),
+        sa.Column(
+            "body_fat_percentage", sa.Numeric(precision=4, scale=2), nullable=True
+        ),
         sa.Column("notes", sa.String(), nullable=True),
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.CheckConstraint(
             "snapshot_type IN ('weekly', 'monthly', 'yearly')", name="ck_snapshot_type"
         ),
-        sa.CheckConstraint("weight_unit IN ('lbs', 'kg')", name="ck_snapshot_weight_unit"),
+        sa.CheckConstraint(
+            "weight_unit IN ('lbs', 'kg')", name="ck_snapshot_weight_unit"
+        ),
         sa.ForeignKeyConstraint(
             ["user_id"],
             ["users.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("user_id", "snapshot_date", "snapshot_type", name="uq_user_snapshot"),
+        sa.UniqueConstraint(
+            "user_id", "snapshot_date", "snapshot_type", name="uq_user_snapshot"
+        ),
     )
     op.create_index(
-        op.f("ix_progress_snapshots_user_id"), "progress_snapshots", ["user_id"], unique=False
+        op.f("ix_progress_snapshots_user_id"),
+        "progress_snapshots",
+        ["user_id"],
+        unique=False,
     )
     op.create_table(
         "taggables",
@@ -288,7 +318,9 @@ def upgrade() -> None:
             ["tags.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint("tag_id", "taggable_type", "taggable_id", name="uq_tag_taggable"),
+        sa.UniqueConstraint(
+            "tag_id", "taggable_type", "taggable_id", name="uq_tag_taggable"
+        ),
     )
     op.create_index(op.f("ix_taggables_tag_id"), "taggables", ["tag_id"], unique=False)
     op.create_table(
@@ -308,7 +340,9 @@ def upgrade() -> None:
         sa.Column("updated_at", sa.DateTime(), nullable=True),
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=False),
-        sa.CheckConstraint("intensity IN ('low', 'medium', 'high')", name="ck_workout_intensity"),
+        sa.CheckConstraint(
+            "intensity IN ('low', 'medium', 'high')", name="ck_workout_intensity"
+        ),
         sa.ForeignKeyConstraint(
             ["user_id"],
             ["users.id"],
@@ -331,7 +365,9 @@ def upgrade() -> None:
         ),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(op.f("ix_goal_progress_goal_id"), "goal_progress", ["goal_id"], unique=False)
+    op.create_index(
+        op.f("ix_goal_progress_goal_id"), "goal_progress", ["goal_id"], unique=False
+    )
     op.create_table(
         "habit_entries",
         sa.Column("habit_id", sa.UUID(), nullable=False),
@@ -350,7 +386,9 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
         sa.UniqueConstraint("habit_id", "entry_date", name="uq_habit_entry_date"),
     )
-    op.create_index(op.f("ix_habit_entries_habit_id"), "habit_entries", ["habit_id"], unique=False)
+    op.create_index(
+        op.f("ix_habit_entries_habit_id"), "habit_entries", ["habit_id"], unique=False
+    )
     op.create_table(
         "workout_exercises",
         sa.Column("workout_id", sa.UUID(), nullable=False),
@@ -369,9 +407,12 @@ def upgrade() -> None:
         sa.Column("id", sa.UUID(), nullable=False),
         sa.Column("created_at", sa.DateTime(), nullable=False),
         sa.CheckConstraint(
-            "distance_unit IN ('miles', 'km', 'meters')", name="ck_exercise_distance_unit"
+            "distance_unit IN ('miles', 'km', 'meters')",
+            name="ck_exercise_distance_unit",
         ),
-        sa.CheckConstraint("weight_unit IN ('lbs', 'kg')", name="ck_exercise_weight_unit"),
+        sa.CheckConstraint(
+            "weight_unit IN ('lbs', 'kg')", name="ck_exercise_weight_unit"
+        ),
         sa.ForeignKeyConstraint(
             ["workout_id"],
             ["workouts.id"],
@@ -379,14 +420,19 @@ def upgrade() -> None:
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index(
-        op.f("ix_workout_exercises_workout_id"), "workout_exercises", ["workout_id"], unique=False
+        op.f("ix_workout_exercises_workout_id"),
+        "workout_exercises",
+        ["workout_id"],
+        unique=False,
     )
     # ### end Alembic commands ###
 
 
 def downgrade() -> None:
     # ### commands auto generated by Alembic - please adjust! ###
-    op.drop_index(op.f("ix_workout_exercises_workout_id"), table_name="workout_exercises")
+    op.drop_index(
+        op.f("ix_workout_exercises_workout_id"), table_name="workout_exercises"
+    )
     op.drop_table("workout_exercises")
     op.drop_index(op.f("ix_habit_entries_habit_id"), table_name="habit_entries")
     op.drop_table("habit_entries")
@@ -396,7 +442,9 @@ def downgrade() -> None:
     op.drop_table("workouts")
     op.drop_index(op.f("ix_taggables_tag_id"), table_name="taggables")
     op.drop_table("taggables")
-    op.drop_index(op.f("ix_progress_snapshots_user_id"), table_name="progress_snapshots")
+    op.drop_index(
+        op.f("ix_progress_snapshots_user_id"), table_name="progress_snapshots"
+    )
     op.drop_table("progress_snapshots")
     op.drop_index(op.f("ix_media_user_id"), table_name="media")
     op.drop_index(op.f("ix_media_file_type"), table_name="media")
