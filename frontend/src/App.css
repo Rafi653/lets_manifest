@@ -1,0 +1,35 @@
+/* Global app styles */
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-container h1 {
+  color: #212529;
+  margin-bottom: 0.5rem;
+}
+
+.page-container > p {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.placeholder-content {
+  background: #f8f9fa;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+  padding: 3rem;
+  text-align: center;
+}
+
+.placeholder-content p {
+  font-size: 1.2rem;
+  color: #6c757d;
+  margin: 0;
+}

@@ -1,26 +1,12 @@
 # Let's Manifest - Frontend
 
-## Overview
+Welcome to the Let's Manifest frontend! This is a React application built with TypeScript and Vite, designed for tracking goals, habits, nutrition, workouts, and overall personal progress.
 
-The frontend application is built with React 18+ and TypeScript, using Vite as the build tool. It provides a modern, responsive user interface for the manifestation journal application.
-
-## Tech Stack
-
-- **Framework**: React 18+ with TypeScript
-- **Build Tool**: Vite
-- **State Management**: React Context API / Redux Toolkit
-- **Routing**: React Router v6
-- **UI Library**: Material-UI (MUI) or shadcn/ui
-- **HTTP Client**: Axios
-- **Form Management**: React Hook Form + Zod
-- **Testing**: Vitest + React Testing Library
-- **Styling**: CSS Modules / Styled Components
-
-## Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- Node.js 18+ and npm/yarn
+- Node.js 18+ and npm
 - Backend API running (see `/backend/README.md`)
 
 ### Installation
@@ -32,14 +18,12 @@ npm install
 
 ### Environment Setup
 
-Copy the example environment file and configure:
-
+1. Copy the example environment file:
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` with your configuration:
-
+2. Edit `.env` with your configuration (default values work for local development):
 ```env
 VITE_API_BASE_URL=http://localhost:8000/api/v1
 VITE_APP_TITLE=Let's Manifest
@@ -48,7 +32,6 @@ VITE_APP_TITLE=Let's Manifest
 ### Development
 
 Start the development server:
-
 ```bash
 npm run dev
 ```
@@ -58,83 +41,155 @@ The application will be available at `http://localhost:5173`
 ### Build
 
 Build for production:
-
 ```bash
 npm run build
 ```
 
 Preview production build:
-
 ```bash
 npm run preview
 ```
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 src/
-├── api/              # API client and configurations
-├── assets/           # Static assets (images, icons, fonts)
+├── api/              # API client configuration
+├── assets/           # Static assets (images, icons)
 ├── components/       # Reusable components
+│   ├── common/       # Common UI components
+│   └── layout/       # Layout components (Header, Footer, etc.)
 ├── contexts/         # React Context providers
 ├── hooks/            # Custom React hooks
 ├── pages/            # Page components (routes)
+│   ├── Dashboard/    # Main dashboard
+│   ├── Goals/        # Goals tracking
+│   ├── Habits/       # Habits tracking
+│   ├── Food/         # Food/nutrition tracking
+│   ├── Workouts/     # Workout tracking
+│   ├── Review/       # Daily reviews
+│   ├── Blog/         # Blog entries
+│   └── Progress/     # Progress visualization
 ├── routes/           # Routing configuration
 ├── services/         # Business logic services
-├── store/            # State management (Redux)
 ├── styles/           # Global styles
-├── types/            # TypeScript types
+├── types/            # TypeScript type definitions
 └── utils/            # Utility functions
 ```
 
-## Available Scripts
+## 🛠️ Tech Stack
 
-- `npm run dev` - Start development server
+- **Framework**: React 18+ with TypeScript
+- **Build Tool**: Vite
+- **Routing**: React Router v6
+- **HTTP Client**: Axios
+- **Styling**: CSS Modules
+- **Code Quality**: ESLint
+
+## 📜 Available Scripts
+
+- `npm run dev` - Start development server with hot reload
 - `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint errors
-- `npm run format` - Format code with Prettier
-- `npm run type-check` - Run TypeScript type checking
-- `npm run test` - Run tests
-- `npm run test:coverage` - Run tests with coverage
+- `npm run preview` - Preview production build locally
+- `npm run lint` - Run ESLint to check code quality
 
-## Code Style
+## 🎨 Code Style
 
 - Use TypeScript for all new files
 - Follow React best practices and hooks rules
 - Use functional components with hooks
 - Keep components small and focused
-- Co-locate component files with their styles and tests
+- Co-locate component files with their styles
 - Use meaningful variable and function names
-- Add JSDoc comments for complex logic
 
-## Testing
+## 🗺️ Application Routes
 
-- Unit tests for components and utilities
-- Integration tests for feature flows
-- E2E tests for critical user journeys
-- Aim for 80%+ code coverage
+The application includes the following main sections:
 
-Run tests:
+- `/` - Dashboard (home page)
+- `/goals` - Goals tracking and management
+- `/habits` - Daily habits tracking
+- `/food` - Food and nutrition tracking
+- `/workouts` - Workout logging
+- `/review` - Daily reflection and review
+- `/blog` - Personal blog entries
+- `/progress` - Overall progress visualization
 
-```bash
-npm run test
-```
+## 🔧 Development Guidelines
 
-## Environment Variables
+### Adding a New Page
 
-- `VITE_API_BASE_URL` - Backend API base URL
-- `VITE_APP_TITLE` - Application title
+1. Create a new directory in `src/pages/`
+2. Add the component file (e.g., `MyPage.tsx`)
+3. Create an `index.ts` barrel export
+4. Add the route in `src/routes/AppRouter.tsx`
+5. Update navigation in `src/components/layout/Header/Header.tsx`
 
-## Contributing
+### Adding a New Component
+
+1. Create a directory in `src/components/common/` or `src/components/layout/`
+2. Add the component file (e.g., `MyComponent.tsx`)
+3. Add styles if needed (e.g., `MyComponent.css`)
+4. Create an `index.ts` barrel export
+5. Document the component's props with TypeScript interfaces
+
+### Working with the API
+
+1. Define types in `src/types/`
+2. Create service functions in `src/services/`
+3. Configure API client in `src/api/`
+4. Use services in components or custom hooks
+
+## 🤝 Contributing
 
 1. Create a feature branch from `main`
-2. Make your changes
-3. Write/update tests
-4. Run linter and tests
-5. Submit a pull request
+2. Make your changes following the code style guidelines
+3. Test your changes locally
+4. Run linter: `npm run lint`
+5. Build to ensure no errors: `npm run build`
+6. Submit a pull request
 
-## Architecture
+## 📚 Learn More
 
-See `/ARCHITECTURE.md` for detailed architecture documentation.
+- [React Documentation](https://react.dev/)
+- [TypeScript Documentation](https://www.typescriptlang.org/)
+- [Vite Documentation](https://vitejs.dev/)
+- [React Router Documentation](https://reactrouter.com/)
+
+## 🎯 Next Steps for Development
+
+- [ ] Implement authentication flow
+- [ ] Add form validation with Zod
+- [ ] Integrate with backend API
+- [ ] Add loading states and error handling
+- [ ] Implement state management (Context or Redux)
+- [ ] Add unit tests with Vitest
+- [ ] Add E2E tests
+- [ ] Implement responsive design improvements
+- [ ] Add accessibility features (ARIA labels, keyboard navigation)
+
+## 🐛 Troubleshooting
+
+### Port 5173 is already in use
+```bash
+# Kill the process using the port
+lsof -ti:5173 | xargs kill -9
+```
+
+### Node modules issues
+```bash
+# Clean install
+rm -rf node_modules package-lock.json
+npm install
+```
+
+### Build errors
+```bash
+# Check TypeScript errors
+npm run build
+```
+
+## 📄 License
+
+See the LICENSE file in the root of the project.
+
