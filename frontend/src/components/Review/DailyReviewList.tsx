@@ -112,6 +112,22 @@ const DailyReviewList: React.FC<DailyReviewListProps> = ({
                 <span className="metric-value">{review.water_intake_ml}ml</span>
               </div>
             )}
+
+            {review.screen_time_minutes !== null && (
+              <div className="metric-item">
+                <span className="metric-label">Screen Time:</span>
+                <span className="metric-value">
+                  {Math.floor(review.screen_time_minutes / 60)}h {review.screen_time_minutes % 60}m
+                </span>
+              </div>
+            )}
+
+            {review.steps !== null && (
+              <div className="metric-item">
+                <span className="metric-label">Steps:</span>
+                <span className="metric-value">{review.steps.toLocaleString()}</span>
+              </div>
+            )}
           </div>
 
           {/* Reflections Section */}

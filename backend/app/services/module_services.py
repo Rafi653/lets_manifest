@@ -445,6 +445,89 @@ class BlogEntryService:
         await self.get_blog_entry(entry_id, user_id)
         return await self.repository.delete(entry_id)
 
+    async def generate_blog_from_review(
+        self, user_id: UUID, review: DailyReview
+    ) -> BlogEntry:
+        """Generate a blog entry from a daily review."""
+        # Generate title from date
+        title = f"Daily Reflection: {review.review_date.strftime('%B %d, %Y')}"
+        
+        # Build content from review data
+        content_parts = []
+        
+        # Mood and Energy section
+        if review.mood_rating or review.energy_level:
+            content_parts.append("## How I Felt Today\n")
+            if review.mood_rating:
+                content_parts.append(f"Mood: {review.mood_rating}/10\n")
+            if review.energy_level:
+                content_parts.append(f"Energy Level: {review.energy_level}/10\n")
+            if review.productivity_rating:
+                content_parts.append(f"Productivity: {review.productivity_rating}/10\n")
+            content_parts.append("\n")
+        
+        # Activity metrics
+        if review.steps or review.screen_time_minutes:
+            content_parts.append("## Today's Metrics\n")
+            if review.steps:
+                content_parts.append(f"Steps: {review.steps:,}\n")
+            if review.screen_time_minutes:
+                hours = review.screen_time_minutes // 60
+                minutes = review.screen_time_minutes % 60
+                content_parts.append(f"Screen Time: {hours}h {minutes}m\n")
+            content_parts.append("\n")
+        
+        # Accomplishments
+        if review.accomplishments:
+            content_parts.append("## Accomplishments\n")
+            content_parts.append(f"{review.accomplishments}\n\n")
+        
+        # Challenges
+        if review.challenges:
+            content_parts.append("## Challenges Faced\n")
+            content_parts.append(f"{review.challenges}\n\n")
+        
+        # Gratitude
+        if review.gratitude:
+            content_parts.append("## Gratitude\n")
+            content_parts.append(f"{review.gratitude}\n\n")
+        
+        # Lessons
+        if review.lessons_learned:
+            content_parts.append("## Lessons Learned\n")
+            content_parts.append(f"{review.lessons_learned}\n\n")
+        
+        # Tomorrow intentions
+        if review.tomorrow_intentions:
+            content_parts.append("## Intentions for Tomorrow\n")
+            content_parts.append(f"{review.tomorrow_intentions}\n\n")
+        
+        # Highlights
+        if review.highlights:
+            content_parts.append("## Highlights\n")
+            content_parts.append(f"{review.highlights}\n")
+        
+        content = "".join(content_parts)
+        
+        # Generate excerpt from first meaningful section
+        excerpt = ""
+        if review.highlights:
+            excerpt = review.highlights[:200] + "..." if len(review.highlights) > 200 else review.highlights
+        elif review.accomplishments:
+            excerpt = review.accomplishments[:200] + "..." if len(review.accomplishments) > 200 else review.accomplishments
+        
+        # Create the blog entry
+        entry_data = BlogEntryCreate(
+            title=title,
+            content=content,
+            excerpt=excerpt,
+            status="draft",
+            is_public=False,
+            is_featured=False,
+        )
+        
+        return await self.create_blog_entry(user_id, entry_data)
+
 
 class ProgressSnapshotService:
     """Service for progress snapshot operations."""

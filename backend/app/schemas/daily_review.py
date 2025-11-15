@@ -20,6 +20,8 @@ class DailyReviewBase(BaseModel):
     sleep_hours: Optional[Decimal] = Field(None, ge=0, le=24)
     sleep_quality: Optional[int] = Field(None, ge=1, le=10)
     water_intake_ml: Optional[int] = Field(None, ge=0)
+    screen_time_minutes: Optional[int] = Field(None, ge=0)
+    steps: Optional[int] = Field(None, ge=0)
     accomplishments: Optional[str] = None
     challenges: Optional[str] = None
     lessons_learned: Optional[str] = None
@@ -43,6 +45,8 @@ class DailyReviewUpdate(BaseModel):
     sleep_hours: Optional[Decimal] = Field(None, ge=0, le=24)
     sleep_quality: Optional[int] = Field(None, ge=1, le=10)
     water_intake_ml: Optional[int] = Field(None, ge=0)
+    screen_time_minutes: Optional[int] = Field(None, ge=0)
+    steps: Optional[int] = Field(None, ge=0)
     accomplishments: Optional[str] = None
     challenges: Optional[str] = None
     lessons_learned: Optional[str] = None

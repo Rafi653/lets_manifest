@@ -24,6 +24,8 @@ const DailyReviewForm: React.FC<DailyReviewFormProps> = ({ review, onSubmit, onC
     sleep_hours: review?.sleep_hours?.toString() || '',
     sleep_quality: review?.sleep_quality?.toString() || '',
     water_intake_ml: review?.water_intake_ml?.toString() || '',
+    screen_time_minutes: review?.screen_time_minutes?.toString() || '',
+    steps: review?.steps?.toString() || '',
     accomplishments: review?.accomplishments || '',
     challenges: review?.challenges || '',
     lessons_learned: review?.lessons_learned || '',
@@ -82,6 +84,22 @@ const DailyReviewForm: React.FC<DailyReviewFormProps> = ({ review, onSubmit, onC
       }
     }
 
+    // Validate screen time
+    if (formData.screen_time_minutes) {
+      const screenTime = Number(formData.screen_time_minutes);
+      if (isNaN(screenTime) || screenTime < 0) {
+        newErrors.screen_time_minutes = 'Must be a positive number';
+      }
+    }
+
+    // Validate steps
+    if (formData.steps) {
+      const stepCount = Number(formData.steps);
+      if (isNaN(stepCount) || stepCount < 0) {
+        newErrors.steps = 'Must be a positive number';
+      }
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -103,6 +121,8 @@ const DailyReviewForm: React.FC<DailyReviewFormProps> = ({ review, onSubmit, onC
         sleep_hours: formData.sleep_hours ? Number(formData.sleep_hours) : null,
         sleep_quality: formData.sleep_quality ? Number(formData.sleep_quality) : null,
         water_intake_ml: formData.water_intake_ml ? Number(formData.water_intake_ml) : null,
+        screen_time_minutes: formData.screen_time_minutes ? Number(formData.screen_time_minutes) : null,
+        steps: formData.steps ? Number(formData.steps) : null,
         accomplishments: formData.accomplishments.trim() || null,
         challenges: formData.challenges.trim() || null,
         lessons_learned: formData.lessons_learned.trim() || null,
@@ -218,6 +238,30 @@ const DailyReviewForm: React.FC<DailyReviewFormProps> = ({ review, onSubmit, onC
             onChange={handleChange}
             error={errors.water_intake_ml}
             helperText="Water consumed in ml"
+          />
+        </div>
+
+        <div className="form-row">
+          <Input
+            label="Screen Time (minutes)"
+            name="screen_time_minutes"
+            type="number"
+            min="0"
+            value={formData.screen_time_minutes}
+            onChange={handleChange}
+            error={errors.screen_time_minutes}
+            helperText="Total screen time in minutes"
+          />
+
+          <Input
+            label="Steps"
+            name="steps"
+            type="number"
+            min="0"
+            value={formData.steps}
+            onChange={handleChange}
+            error={errors.steps}
+            helperText="Total steps walked today"
           />
         </div>
       </div>

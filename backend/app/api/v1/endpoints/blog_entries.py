@@ -108,3 +108,31 @@ async def delete_blog_entry(
     return APIResponse(
         data={"deleted": deleted}, message="Blog entry deleted successfully"
     )
+
+
+@router.post(
+    "/generate-from-review/{review_id}",
+    response_model=APIResponse[BlogEntryResponse],
+    status_code=status.HTTP_201_CREATED,
+)
+async def generate_blog_from_review(
+    review_id: UUID,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    """Generate a blog entry from a daily review."""
+    from app.services.module_services import DailyReviewService
+    
+    blog_service = BlogEntryService(db)
+    review_service = DailyReviewService(db)
+    
+    # Get the daily review
+    review = await review_service.get_review(review_id, current_user.id)
+    
+    # Generate blog entry from review
+    entry = await blog_service.generate_blog_from_review(current_user.id, review)
+    
+    return APIResponse(
+        data=BlogEntryResponse.model_validate(entry),
+        message="Blog entry generated successfully from daily review",
+    )
