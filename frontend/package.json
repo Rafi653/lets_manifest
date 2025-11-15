@@ -7,7 +7,12 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "type-check": "tsc --noEmit",
+    "preview": "vite preview",
+    "test": "echo 'Tests not yet implemented. Install vitest and @testing-library/react to add tests.' && exit 0",
+    "test:coverage": "echo 'Tests not yet implemented. Install vitest and @testing-library/react to add tests.' && exit 0",
+    "test:watch": "echo 'Tests not yet implemented. Install vitest and @testing-library/react to add tests.' && exit 0",
+    "test:e2e": "echo 'E2E tests not yet implemented. Install @playwright/test to add E2E tests.' && exit 0"
   },
   "dependencies": {
     "axios": "^1.13.2",
