@@ -1,6 +1,7 @@
 """
 Workout and workout exercise models for exercise tracking.
 """
+
 from datetime import datetime
 
 from sqlalchemy import (
@@ -26,7 +27,9 @@ class Workout(Base):
     __tablename__ = "workouts"
 
     # Foreign keys
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    user_id = Column(
+        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
+    )
 
     # Workout info
     workout_date = Column(Date, nullable=False)
@@ -50,12 +53,16 @@ class Workout(Base):
 
     # Constraints
     __table_args__ = (
-        CheckConstraint("intensity IN ('low', 'medium', 'high')", name="ck_workout_intensity"),
+        CheckConstraint(
+            "intensity IN ('low', 'medium', 'high')", name="ck_workout_intensity"
+        ),
     )
 
     # Relationships
     user = relationship("User", back_populates="workouts")
-    exercises = relationship("WorkoutExercise", back_populates="workout", cascade="all, delete-orphan")
+    exercises = relationship(
+        "WorkoutExercise", back_populates="workout", cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return f"<Workout(id={self.id}, type={self.workout_type}, date={self.workout_date})>"
@@ -67,7 +74,9 @@ class WorkoutExercise(Base):
     __tablename__ = "workout_exercises"
 
     # Foreign keys
-    workout_id = Column(UUID(as_uuid=True), ForeignKey("workouts.id"), nullable=False, index=True)
+    workout_id = Column(
+        UUID(as_uuid=True), ForeignKey("workouts.id"), nullable=False, index=True
+    )
 
     # Exercise info
     exercise_name = Column(String(255), nullable=False)
@@ -92,7 +101,10 @@ class WorkoutExercise(Base):
     # Constraints
     __table_args__ = (
         CheckConstraint("weight_unit IN ('lbs', 'kg')", name="ck_exercise_weight_unit"),
-        CheckConstraint("distance_unit IN ('miles', 'km', 'meters')", name="ck_exercise_distance_unit"),
+        CheckConstraint(
+            "distance_unit IN ('miles', 'km', 'meters')",
+            name="ck_exercise_distance_unit",
+        ),
     )
 
     # Relationships

@@ -1,6 +1,7 @@
 """
 Tag and taggable models for categorization system.
 """
+
 from sqlalchemy import (
     CheckConstraint,
     Column,
@@ -29,7 +30,9 @@ class Tag(Base):
     usage_count = Column(Integer, default=0)
 
     # Relationships
-    taggables = relationship("Taggable", back_populates="tag", cascade="all, delete-orphan")
+    taggables = relationship(
+        "Taggable", back_populates="tag", cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return f"<Tag(id={self.id}, name={self.name})>"
@@ -41,7 +44,9 @@ class Taggable(Base):
     __tablename__ = "taggables"
 
     # Foreign keys
-    tag_id = Column(UUID(as_uuid=True), ForeignKey("tags.id"), nullable=False, index=True)
+    tag_id = Column(
+        UUID(as_uuid=True), ForeignKey("tags.id"), nullable=False, index=True
+    )
 
     # Polymorphic association
     taggable_id = Column(UUID(as_uuid=True), nullable=False)
@@ -53,11 +58,15 @@ class Taggable(Base):
             "taggable_type IN ('goal', 'habit', 'blog_entry', 'workout', 'food', 'daily_review')",
             name="ck_taggable_type",
         ),
-        UniqueConstraint("tag_id", "taggable_type", "taggable_id", name="uq_tag_taggable"),
+        UniqueConstraint(
+            "tag_id", "taggable_type", "taggable_id", name="uq_tag_taggable"
+        ),
     )
 
     # Relationships
     tag = relationship("Tag", back_populates="taggables")
 
     def __repr__(self) -> str:
-        return f"<Taggable(id={self.id}, tag_id={self.tag_id}, type={self.taggable_type})>"
+        return (
+            f"<Taggable(id={self.id}, tag_id={self.tag_id}, type={self.taggable_type})>"
+        )

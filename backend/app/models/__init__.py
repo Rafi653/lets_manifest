@@ -1,6 +1,7 @@
 """
 SQLAlchemy models for Let's Manifest application.
 """
+
 from .base import Base
 from .blog_entry import BlogEntry
 from .daily_review import DailyReview

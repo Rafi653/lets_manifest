@@ -1,6 +1,7 @@
 """
 User model for authentication and profile management.
 """
+
 from datetime import datetime
 
 from sqlalchemy import Boolean, Column, DateTime, String
@@ -39,11 +40,19 @@ class User(Base):
     goals = relationship("Goal", back_populates="user", cascade="all, delete-orphan")
     habits = relationship("Habit", back_populates="user", cascade="all, delete-orphan")
     foods = relationship("Food", back_populates="user", cascade="all, delete-orphan")
-    workouts = relationship("Workout", back_populates="user", cascade="all, delete-orphan")
-    daily_reviews = relationship("DailyReview", back_populates="user", cascade="all, delete-orphan")
-    blog_entries = relationship("BlogEntry", back_populates="user", cascade="all, delete-orphan")
+    workouts = relationship(
+        "Workout", back_populates="user", cascade="all, delete-orphan"
+    )
+    daily_reviews = relationship(
+        "DailyReview", back_populates="user", cascade="all, delete-orphan"
+    )
+    blog_entries = relationship(
+        "BlogEntry", back_populates="user", cascade="all, delete-orphan"
+    )
     media = relationship("Media", back_populates="user", cascade="all, delete-orphan")
-    progress_snapshots = relationship("ProgressSnapshot", back_populates="user", cascade="all, delete-orphan")
+    progress_snapshots = relationship(
+        "ProgressSnapshot", back_populates="user", cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return f"<User(id={self.id}, username={self.username}, email={self.email})>"

@@ -1,6 +1,7 @@
 """
 Habit and habit entry models for habit tracking.
 """
+
 from datetime import datetime
 
 from sqlalchemy import (
@@ -27,7 +28,9 @@ class Habit(Base):
     __tablename__ = "habits"
 
     # Foreign keys
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    user_id = Column(
+        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
+    )
 
     # Basic info
     name = Column(String(255), nullable=False)
@@ -54,12 +57,16 @@ class Habit(Base):
 
     # Constraints
     __table_args__ = (
-        CheckConstraint("frequency IN ('daily', 'weekly', 'custom')", name="ck_habit_frequency"),
+        CheckConstraint(
+            "frequency IN ('daily', 'weekly', 'custom')", name="ck_habit_frequency"
+        ),
     )
 
     # Relationships
     user = relationship("User", back_populates="habits")
-    entries = relationship("HabitEntry", back_populates="habit", cascade="all, delete-orphan")
+    entries = relationship(
+        "HabitEntry", back_populates="habit", cascade="all, delete-orphan"
+    )
 
     def __repr__(self) -> str:
         return f"<Habit(id={self.id}, name={self.name}, streak={self.current_streak})>"
@@ -71,7 +78,9 @@ class HabitEntry(Base):
     __tablename__ = "habit_entries"
 
     # Foreign keys
-    habit_id = Column(UUID(as_uuid=True), ForeignKey("habits.id"), nullable=False, index=True)
+    habit_id = Column(
+        UUID(as_uuid=True), ForeignKey("habits.id"), nullable=False, index=True
+    )
 
     # Entry data
     entry_date = Column(Date, nullable=False)

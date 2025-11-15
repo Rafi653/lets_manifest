@@ -1,6 +1,7 @@
 """
 Daily review model for end-of-day reflection.
 """
+
 from datetime import datetime
 
 from sqlalchemy import (
@@ -26,7 +27,9 @@ class DailyReview(Base):
     __tablename__ = "daily_reviews"
 
     # Foreign keys
-    user_id = Column(UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True)
+    user_id = Column(
+        UUID(as_uuid=True), ForeignKey("users.id"), nullable=False, index=True
+    )
 
     # Review date
     review_date = Column(Date, nullable=False)
@@ -56,10 +59,19 @@ class DailyReview(Base):
 
     # Constraints
     __table_args__ = (
-        CheckConstraint("mood_rating >= 1 AND mood_rating <= 10", name="ck_review_mood_rating"),
-        CheckConstraint("energy_level >= 1 AND energy_level <= 10", name="ck_review_energy_level"),
-        CheckConstraint("productivity_rating >= 1 AND productivity_rating <= 10", name="ck_review_productivity"),
-        CheckConstraint("sleep_quality >= 1 AND sleep_quality <= 10", name="ck_review_sleep_quality"),
+        CheckConstraint(
+            "mood_rating >= 1 AND mood_rating <= 10", name="ck_review_mood_rating"
+        ),
+        CheckConstraint(
+            "energy_level >= 1 AND energy_level <= 10", name="ck_review_energy_level"
+        ),
+        CheckConstraint(
+            "productivity_rating >= 1 AND productivity_rating <= 10",
+            name="ck_review_productivity",
+        ),
+        CheckConstraint(
+            "sleep_quality >= 1 AND sleep_quality <= 10", name="ck_review_sleep_quality"
+        ),
         UniqueConstraint("user_id", "review_date", name="uq_user_review_date"),
     )
 
