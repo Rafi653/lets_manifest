@@ -12,6 +12,8 @@ export interface DailyReview {
   sleep_hours: number | null; // 0-24
   sleep_quality: number | null; // 1-10
   water_intake_ml: number | null;
+  screen_time_minutes: number | null;
+  steps: number | null;
   accomplishments: string | null;
   challenges: string | null;
   lessons_learned: string | null;
@@ -30,6 +32,8 @@ export interface DailyReviewCreate {
   sleep_hours?: number | null;
   sleep_quality?: number | null;
   water_intake_ml?: number | null;
+  screen_time_minutes?: number | null;
+  steps?: number | null;
   accomplishments?: string | null;
   challenges?: string | null;
   lessons_learned?: string | null;
@@ -45,6 +49,8 @@ export interface DailyReviewUpdate {
   sleep_hours?: number | null;
   sleep_quality?: number | null;
   water_intake_ml?: number | null;
+  screen_time_minutes?: number | null;
+  steps?: number | null;
   accomplishments?: string | null;
   challenges?: string | null;
   lessons_learned?: string | null;

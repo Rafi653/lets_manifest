@@ -45,6 +45,8 @@ class DailyReview(Base):
 
     # Health tracking
     water_intake_ml = Column(Integer)
+    screen_time_minutes = Column(Integer)
+    steps = Column(Integer)
 
     # Reflections
     accomplishments = Column(String)
