@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { Food as FoodType, CreateFoodRequest, UpdateFoodRequest } from '../../types/food';
 import { foodService } from '../../services/foodService';
 import FoodForm from '../../components/Food/FoodForm';
@@ -22,11 +22,7 @@ const Food: React.FC = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
-  useEffect(() => {
-    loadFoods();
-  }, [mealTypeFilter, startDate, endDate, page]);
-
-  const loadFoods = async () => {
+  const loadFoods = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -45,7 +41,11 @@ const Food: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [mealTypeFilter, startDate, endDate, page]);
+
+  useEffect(() => {
+    loadFoods();
+  }, [loadFoods]);
 
   const handleCreateFood = async (data: CreateFoodRequest | UpdateFoodRequest) => {
     try {

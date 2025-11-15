@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { Workout, CreateWorkoutRequest, UpdateWorkoutRequest } from '../../types/workout';
 import { workoutService } from '../../services/workoutService';
 import WorkoutForm from '../../components/Workouts/WorkoutForm';
 import WorkoutList from '../../components/Workouts/WorkoutList';
 import Button from '../../components/common/Button';
-import Select from '../../components/common/Select';
 import Input from '../../components/common/Input';
 import './Workouts.css';
 
@@ -22,11 +21,7 @@ const Workouts: React.FC = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
 
-  useEffect(() => {
-    loadWorkouts();
-  }, [workoutTypeFilter, startDate, endDate, page]);
-
-  const loadWorkouts = async () => {
+  const loadWorkouts = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -45,7 +40,11 @@ const Workouts: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [workoutTypeFilter, startDate, endDate, page]);
+
+  useEffect(() => {
+    loadWorkouts();
+  }, [loadWorkouts]);
 
   const handleCreateWorkout = async (data: CreateWorkoutRequest | UpdateWorkoutRequest) => {
     try {

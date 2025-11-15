@@ -133,7 +133,7 @@ const WorkoutList: React.FC<WorkoutListProps> = ({ workouts, onEdit, onDelete, l
             <div className="workout-exercises">
               <h4>Exercises ({workout.exercises.length})</h4>
               <div className="exercises-grid">
-                {workout.exercises.map((exercise, idx) => (
+                {workout.exercises.map((exercise) => (
                   <div key={exercise.id} className="exercise-card">
                     <div className="exercise-name">{exercise.exercise_name}</div>
                     <div className="exercise-details">

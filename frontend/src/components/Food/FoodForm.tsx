@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import type { Food, CreateFoodRequest, UpdateFoodRequest, MealType } from '../../types/food';
+import type { Food, CreateFoodRequest, UpdateFoodRequest } from '../../types/food';
 import Button from '../common/Button';
 import Input from '../common/Input';
 import Select from '../common/Select';

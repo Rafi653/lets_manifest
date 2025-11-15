@@ -4,7 +4,6 @@ import type {
   CreateWorkoutRequest,
   UpdateWorkoutRequest,
   CreateWorkoutExerciseRequest,
-  WorkoutIntensity,
 } from '../../types/workout';
 import Button from '../common/Button';
 import Input from '../common/Input';
@@ -78,7 +77,7 @@ const WorkoutForm: React.FC<WorkoutFormProps> = ({ workout, onSubmit, onCancel }
     }));
   };
 
-  const updateExercise = (index: number, field: string, value: any) => {
+  const updateExercise = (index: number, field: string, value: string | number | undefined) => {
     setFormData((prev) => ({
       ...prev,
       exercises: prev.exercises?.map((ex, i) =>
