@@ -1,0 +1,189 @@
+.review-list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.review-list-loading,
+.review-list-empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #6b7280;
+}
+
+.spinner-large {
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+  border: 3px solid rgba(102, 126, 234, 0.2);
+  border-top-color: #667eea;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.review-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  transition: box-shadow 0.2s ease;
+}
+
+.review-card:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.review-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.review-date {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.review-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.review-actions button {
+  padding: 0.5rem 0.875rem;
+  font-size: 0.875rem;
+}
+
+/* Metrics Section */
+.review-metrics {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.metric-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.metric-label {
+  font-weight: 500;
+  color: #4b5563;
+  min-width: 120px;
+}
+
+.rating-bar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  height: 1.5rem;
+  position: relative;
+}
+
+.rating-bar::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 0.5rem;
+  background-color: #e5e7eb;
+  border-radius: 0.25rem;
+}
+
+.rating-fill {
+  position: absolute;
+  left: 0;
+  height: 0.5rem;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  border-radius: 0.25rem;
+  transition: width 0.3s ease;
+}
+
+.rating-value {
+  position: relative;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #667eea;
+  min-width: 3rem;
+  text-align: right;
+}
+
+.metric-value {
+  font-weight: 600;
+  color: #667eea;
+}
+
+/* Reflections Section */
+.review-reflections {
+  display: grid;
+  gap: 1rem;
+}
+
+.reflection-item {
+  padding: 1rem;
+  background-color: #f9fafb;
+  border-left: 3px solid #667eea;
+  border-radius: 0.375rem;
+}
+
+.reflection-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.reflection-text {
+  margin: 0;
+  color: #4b5563;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .review-card-header {
+    flex-direction: column;
+  }
+
+  .review-actions {
+    width: 100%;
+  }
+
+  .review-actions button {
+    flex: 1;
+  }
+
+  .metric-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .metric-label {
+    min-width: auto;
+  }
+
+  .rating-bar {
+    width: 100%;
+  }
+}
